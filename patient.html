@@ -75,7 +75,6 @@
       <div class="tabs">
         <div class="tab active" data-tab="admin">Datos administrativos</div>
         <div class="tab" data-tab="visits">Consultas</div>
-        <div class="tab" data-tab="clinical">Ficha clínica</div>
         <div class="tab" data-tab="refraction">Refracción</div>
         <div class="tab" data-tab="prescriptions">Medicación</div>
         <div class="tab" data-tab="studies">Estudios</div>
@@ -162,37 +161,6 @@
             <p class="text-muted">Cargando historial…</p>
           </div>
         </div>
-      </div>
-
-      <!-- Panel: Ficha clínica -->
-      <div class="tab-panel" id="panel-clinical">
-        <div class="card">
-          <h2>Nueva ficha clínica</h2>
-          <form id="clinical-form">
-            <div class="form-grid">
-              <div class="full"><label>Motivo de consulta</label><input type="text" name="reason" /></div>
-              <div class="full"><label>Enfermedad actual</label><textarea name="current_illness" rows="2"></textarea></div>
-              <div><label>Antecedentes personales</label><textarea name="personal_history" rows="2"></textarea></div>
-              <div><label>Antecedentes oftalmológicos</label><textarea name="ophthalmic_history" rows="2"></textarea></div>
-              <div><label>Antecedentes familiares</label><textarea name="family_history" rows="2"></textarea></div>
-              <div><label>Alergias</label><input type="text" name="allergies" /></div>
-              <div><label>Cirugías previas</label><input type="text" name="previous_surgeries" /></div>
-              <div><label>Enfermedades sistémicas</label><input type="text" name="systemic_diseases" /></div>
-              <div class="full"><label>Medicación actual</label><input type="text" name="current_medication" /></div>
-              <div><label>AV sin corrección</label><input type="text" name="va_uncorrected" /></div>
-              <div><label>AV con corrección</label><input type="text" name="va_corrected" /></div>
-              <div><label>PIO OD</label><input type="text" name="iop_od" /></div>
-              <div><label>PIO OI</label><input type="text" name="iop_oi" /></div>
-              <div class="full"><label>Biomicroscopía</label><textarea name="biomicroscopy" rows="2"></textarea></div>
-              <div class="full"><label>Fondo de ojo</label><textarea name="fundus" rows="2"></textarea></div>
-              <div class="full"><label>Diagnóstico</label><textarea name="diagnosis" rows="2"></textarea></div>
-              <div class="full"><label>Conducta médica</label><textarea name="medical_plan" rows="2"></textarea></div>
-            </div>
-            <button type="submit" class="btn btn-primary" data-label="Guardar ficha clínica">Guardar ficha clínica</button>
-          </form>
-        </div>
-        <h3>Historial</h3>
-        <div id="clinical-list"></div>
       </div>
 
       <!-- Panel: Refracción -->
@@ -397,7 +365,6 @@
     import { getPatientById, updatePatient, archivePatient } from './js/patients.js';
     import { loadPatientVisitsPanel } from './js/visits.js';
     import { showAlert, calculateAge, formatDate, escapeHtml } from './js/utils.js';
-    import { initClinicalPanel } from './js/clinical.js';
     import { initRefractionPanel } from './js/refractions.js';
     import { initPrescriptionsPanel } from './js/prescriptions.js';
     import { initStudiesPanel } from './js/studies.js';
@@ -430,7 +397,6 @@
       await loadPatientVisitsPanel('visits-history', patient.id);
 
       // Inicializar módulos clínicos del paciente
-      await initClinicalPanel(patient.id);
       await initRefractionPanel(patient.id);
       await initPrescriptionsPanel(patient.id);
       await initStudiesPanel(patient.id);
@@ -440,7 +406,6 @@
       await initSharingPanel(patient.id);
 
       // Delegación de eventos para botones "Imprimir" de cada módulo
-      wirePrintButtons('#panel-clinical', patient);
       wirePrintButtons('#panel-refraction', patient);
       wirePrintButtons('#panel-prescriptions', patient);
       wirePrintButtons('#panel-studies', patient);

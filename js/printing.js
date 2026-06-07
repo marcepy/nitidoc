@@ -14,7 +14,6 @@ import { getAssetSignedUrl, loadProfile } from './settings.js';
 import { getDefaultTemplate } from './templates.js';
 
 const TABLES = {
-  clinical_record: { table: 'clinical_records', title: 'Ficha clínica oftalmológica', templateType: 'informe_completo' },
   refraction: { table: 'refractions', title: 'Receta de lentes', templateType: 'receta_lentes' },
   prescription: { table: 'prescriptions', title: 'Receta médica / indicación', templateType: 'receta_medica' },
   ophthalmic_study: { table: 'ophthalmic_studies', title: 'Solicitud de estudio oftalmológico', templateType: 'estudios_oftalmologicos' },
@@ -135,27 +134,6 @@ function field(label, value) {
 // ---------------------------------------------------------------------
 // Constructores de secciones por tipo de documento
 // ---------------------------------------------------------------------
-function sectionClinicalRecord(r) {
-  return `<div class="print-section"><h3>Ficha clínica</h3>
-    ${field('Motivo de consulta', r.reason)}
-    ${field('Enfermedad actual', r.current_illness)}
-    ${field('Antecedentes personales', r.personal_history)}
-    ${field('Antecedentes oftalmológicos', r.ophthalmic_history)}
-    ${field('Antecedentes familiares', r.family_history)}
-    ${field('Alergias', r.allergies)}
-    ${field('Cirugías previas', r.previous_surgeries)}
-    ${field('Enfermedades sistémicas', r.systemic_diseases)}
-    ${field('Medicación actual', r.current_medication)}
-    ${field('AV sin corrección', r.va_uncorrected)}
-    ${field('AV con corrección', r.va_corrected)}
-    ${field('PIO OD', r.iop_od)} ${field('PIO OI', r.iop_oi)}
-    ${field('Biomicroscopía', r.biomicroscopy)}
-    ${field('Fondo de ojo', r.fundus)}
-    ${field('Diagnóstico', r.diagnosis)}
-    ${field('Conducta médica', r.medical_plan)}
-  </div>`;
-}
-
 function sectionRefraction(r) {
   return `<div class="print-section"><h3>Receta de lentes</h3>
     <table>
@@ -297,10 +275,11 @@ export async function printRecord(type, recordId, patient) {
 export async function printFullPatientFile(patient) {
   const [profile, template] = await Promise.all([loadProfile(), getDefaultTemplate('informe_completo')]);
 
-  const [{ data: visits }, { data: records }] = await Promise.all([
-    supabase.from('visits').select('*').eq('patient_id', patient.id).order('visit_date', { ascending: false }),
-    supabase.from('clinical_records').select('*').eq('patient_id', patient.id).order('created_at', { ascending: false }).limit(1),
-  ]);
+  const { data: visits } = await supabase
+    .from('visits')
+    .select('*')
+    .eq('patient_id', patient.id)
+    .order('visit_date', { ascending: false });
 
   let sections = `<div class="print-section"><h3>Datos administrativos</h3>
     ${field('Teléfono', patient.phone)}
@@ -311,8 +290,6 @@ export async function printFullPatientFile(patient) {
     ${field('Número de afiliado', patient.insurance_member_number)}
     ${field('Observaciones', patient.admin_notes)}
   </div>`;
-
-  if (records && records[0]) sections += sectionClinicalRecord(records[0]);
 
   if (visits && visits.length) {
     sections += '<div class="print-section"><h3>Historial de consultas</h3>';

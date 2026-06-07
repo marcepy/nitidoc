@@ -107,6 +107,15 @@ create table if not exists visits (
   updated_at timestamptz not null default now()
 );
 
+-- Antecedentes (fusionados desde el módulo de Ficha clínica, ahora parte de la consulta)
+alter table visits add column if not exists personal_history text;
+alter table visits add column if not exists ophthalmic_history text;
+alter table visits add column if not exists family_history text;
+alter table visits add column if not exists allergies text;
+alter table visits add column if not exists previous_surgeries text;
+alter table visits add column if not exists systemic_diseases text;
+alter table visits add column if not exists current_medication text;
+
 create index if not exists idx_visits_doctor_id on visits(doctor_id);
 create index if not exists idx_visits_patient_id on visits(patient_id);
 create index if not exists idx_visits_visit_date on visits(visit_date);

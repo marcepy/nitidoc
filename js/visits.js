@@ -12,6 +12,8 @@ import { searchPatients } from './patients.js';
 
 const VISIT_FIELDS = [
   'visit_date', 'reason', 'current_illness',
+  'personal_history', 'ophthalmic_history', 'family_history', 'allergies',
+  'previous_surgeries', 'systemic_diseases', 'current_medication',
   'va_od_uncorrected', 'va_oi_uncorrected', 'va_od_corrected', 'va_oi_corrected',
   'iop_od', 'iop_oi', 'biomicroscopy', 'fundus',
   'diagnosis', 'medical_plan', 'instructions', 'next_control_at', 'responsible_doctor',
