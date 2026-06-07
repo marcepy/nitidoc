@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nitidoc — Panel principal</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <div class="app-layout">
+    <aside class="sidebar">
+      <div class="brand">Nitidoc</div>
+      <nav>
+        <a href="dashboard.html" class="active">Pacientes</a>
+        <a href="visit.html">Nueva consulta</a>
+        <a href="templates.html">Plantillas</a>
+        <a href="settings.html">Configuración</a>
+        <a href="#" id="logout-link">Cerrar sesión</a>
+      </nav>
+    </aside>
+
+    <header class="topbar">
+      <span class="brand">Nitidoc</span>
+      <button class="hamburger" aria-label="Abrir menú">☰</button>
+    </header>
+
+    <main class="main-content">
+      <div class="flex-between mb-1" style="flex-wrap: wrap; gap: 0.75rem;">
+        <h1 style="margin:0;">Pacientes</h1>
+        <div class="flex gap-1">
+          <button class="btn btn-primary" id="open-new-patient">Nuevo paciente</button>
+          <a class="btn btn-secondary" href="visit.html">Nueva consulta</a>
+        </div>
+      </div>
+
+      <div id="alert-box"></div>
+
+      <!-- Formulario rápido de nuevo paciente -->
+      <section class="card" id="new-patient-card" style="display:none;">
+        <h2>Nuevo paciente</h2>
+        <form id="new-patient-form">
+          <div class="form-grid">
+            <div>
+              <label for="first_name">Nombre *</label>
+              <input type="text" id="first_name" name="first_name" required />
+            </div>
+            <div>
+              <label for="last_name">Apellido *</label>
+              <input type="text" id="last_name" name="last_name" required />
+            </div>
+            <div>
+              <label for="document_id">Cédula / documento</label>
+              <input type="text" id="document_id" name="document_id" />
+            </div>
+            <div>
+              <label for="birth_date">Fecha de nacimiento</label>
+              <input type="date" id="birth_date" name="birth_date" />
+            </div>
+            <div>
+              <label for="sex">Sexo</label>
+              <select id="sex" name="sex">
+                <option value="">Seleccionar…</option>
+                <option value="F">Femenino</option>
+                <option value="M">Masculino</option>
+                <option value="OTRO">Otro</option>
+              </select>
+            </div>
+            <div>
+              <label for="phone">Teléfono</label>
+              <input type="tel" id="phone" name="phone" />
+            </div>
+            <div>
+              <label for="email">Email</label>
+              <input type="email" id="email" name="email" />
+            </div>
+            <div>
+              <label for="health_insurance">Seguro médico</label>
+              <input type="text" id="health_insurance" name="health_insurance" />
+            </div>
+          </div>
+          <div class="flex gap-1">
+            <button type="submit" class="btn btn-primary">Crear paciente</button>
+            <button type="button" class="btn btn-outline" id="cancel-new-patient">Cancelar</button>
+          </div>
+        </form>
+      </section>
+
+      <!-- Buscador y filtros -->
+      <section class="card">
+        <div class="form-grid">
+          <div class="full">
+            <label for="patient-search">Buscar paciente</label>
+            <input type="text" id="patient-search" placeholder="Nombre, apellido, cédula, teléfono o email…" />
+          </div>
+          <div>
+            <label for="patient-order">Ordenar por</label>
+            <select id="patient-order">
+              <option value="last_visit_at">Última consulta</option>
+              <option value="created_at">Fecha de creación</option>
+              <option value="last_name">Apellido</option>
+              <option value="first_name">Nombre</option>
+            </select>
+          </div>
+        </div>
+
+        <label>Filtrar por última consulta</label>
+        <div class="chip-group">
+          <button class="chip" data-visit-filter="hoy">Consultados hoy</button>
+          <button class="chip" data-visit-filter="7dias">Últimos 7 días</button>
+          <button class="chip" data-visit-filter="30dias">Últimos 30 días</button>
+          <button class="chip" data-visit-filter="sin_reciente">Sin consulta reciente</button>
+        </div>
+      </section>
+
+      <!-- Listado de pacientes -->
+      <section class="card">
+        <div id="patients-list"></div>
+      </section>
+    </main>
+
+    <!-- Accesos rápidos a últimos pacientes consultados -->
+    <aside class="sidebar" style="border-left:1px solid var(--color-border); border-right:none;">
+      <h3>Últimos consultados</h3>
+      <div id="recent-patients"></div>
+    </aside>
+  </div>
+
+  <script src="js/config.js"></script>
+  <script type="module">
+    import { requireAuth, signOut } from './js/auth.js';
+    import { initPatientsDashboard, initNewPatientForm } from './js/patients.js';
+
+    (async () => {
+      await requireAuth();
+      await initPatientsDashboard();
+      initNewPatientForm(() => {
+        document.getElementById('new-patient-card').style.display = 'none';
+        initPatientsDashboard();
+      });
+
+      const card = document.getElementById('new-patient-card');
+      document.getElementById('open-new-patient')?.addEventListener('click', () => {
+        card.style.display = card.style.display === 'none' ? 'block' : 'none';
+      });
+      document.getElementById('cancel-new-patient')?.addEventListener('click', () => {
+        card.style.display = 'none';
+      });
+
+      document.getElementById('logout-link')?.addEventListener('click', (e) => {
+        e.preventDefault();
+        signOut();
+      });
+    })();
+  </script>
+</body>
+</html>

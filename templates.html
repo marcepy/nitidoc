@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nitidoc — Plantillas</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <div class="app-layout">
+    <aside class="sidebar">
+      <div class="brand">Nitidoc</div>
+      <nav>
+        <a href="dashboard.html">Pacientes</a>
+        <a href="visit.html">Nueva consulta</a>
+        <a href="templates.html" class="active">Plantillas</a>
+        <a href="settings.html">Configuración</a>
+        <a href="#" id="logout-link">Cerrar sesión</a>
+      </nav>
+    </aside>
+
+    <header class="topbar">
+      <span class="brand">Nitidoc</span>
+      <button class="hamburger" aria-label="Abrir menú">☰</button>
+    </header>
+
+    <main class="main-content">
+      <h1>Plantillas configurables</h1>
+      <p class="text-muted">
+        Personaliza el encabezado, pie de página, texto legal y colores de
+        tus documentos imprimibles. Marca una plantilla como predeterminada
+        para cada tipo de documento y Nitidoc la aplicará automáticamente
+        al imprimir o exportar.
+      </p>
+
+      <div id="alert-box"></div>
+
+      <section class="card">
+        <h2 id="template-form-title">Nueva plantilla</h2>
+        <form id="template-form">
+          <div class="form-grid">
+            <div>
+              <label for="template_type">Tipo de documento</label>
+              <select id="template_type" name="template_type" required></select>
+            </div>
+            <div>
+              <label for="name">Nombre de la plantilla</label>
+              <input type="text" id="name" name="name" required placeholder="Ej: Receta estándar consultorio central" />
+            </div>
+            <div class="full">
+              <label for="header_text">Encabezado</label>
+              <input type="text" id="header_text" name="header_text" placeholder="Texto que aparece junto al logo" />
+            </div>
+            <div class="full">
+              <label for="legal_text">Texto legal / aclaratorio</label>
+              <textarea id="legal_text" name="legal_text" rows="2"></textarea>
+            </div>
+            <div class="full">
+              <label for="footer_text">Pie de página</label>
+              <textarea id="footer_text" name="footer_text" rows="2"></textarea>
+            </div>
+            <div>
+              <label for="primary_color">Color primario</label>
+              <input type="color" id="primary_color" name="primary_color" value="#2563eb" />
+            </div>
+            <div>
+              <label for="secondary_color">Color secundario</label>
+              <input type="color" id="secondary_color" name="secondary_color" value="#e5f4ea" />
+            </div>
+            <div class="full flex gap-1" style="align-items:center;">
+              <input type="checkbox" id="is_default" name="is_default" style="width:auto; margin:0;" />
+              <label for="is_default" style="margin:0;">Usar como plantilla predeterminada para este tipo de documento</label>
+            </div>
+          </div>
+          <div class="flex gap-1">
+            <button type="submit" class="btn btn-primary">Guardar plantilla</button>
+            <button type="button" class="btn btn-outline" id="template-form-cancel">Cancelar</button>
+          </div>
+        </form>
+      </section>
+
+      <h2>Mis plantillas</h2>
+      <div id="templates-list"></div>
+    </main>
+  </div>
+
+  <script src="js/config.js"></script>
+  <script type="module">
+    import { requireAuth, signOut } from './js/auth.js';
+    import { initTemplatesPage } from './js/templates.js';
+
+    (async () => {
+      await requireAuth();
+      await initTemplatesPage();
+      document.getElementById('logout-link')?.addEventListener('click', (e) => {
+        e.preventDefault();
+        signOut();
+      });
+    })();
+  </script>
+</body>
+</html>

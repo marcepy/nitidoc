@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nitidoc — Gestión oftalmológica clara, segura y rápida</title>
+</head>
+<body>
+  <script src="js/config.js"></script>
+  <script type="module">
+    import { getSession } from './js/auth.js';
+
+    (async () => {
+      const session = await getSession();
+      window.location.replace(session ? '/dashboard.html' : '/login.html');
+    })();
+  </script>
+  <noscript>Nitidoc requiere JavaScript habilitado para funcionar.</noscript>
+</body>
+</html>

@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nitidoc — Ficha del paciente</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="css/print.css" />
+</head>
+<body>
+  <div class="app-layout">
+    <aside class="sidebar">
+      <div class="brand">Nitidoc</div>
+      <nav>
+        <a href="dashboard.html" class="active">Pacientes</a>
+        <a href="visit.html">Nueva consulta</a>
+        <a href="templates.html">Plantillas</a>
+        <a href="settings.html">Configuración</a>
+        <a href="#" id="logout-link">Cerrar sesión</a>
+      </nav>
+    </aside>
+
+    <header class="topbar">
+      <span class="brand">Nitidoc</span>
+      <button class="hamburger" aria-label="Abrir menú">☰</button>
+    </header>
+
+    <main class="main-content">
+      <div id="alert-box"></div>
+
+      <!-- Encabezado del paciente -->
+      <div class="card">
+        <div class="flex-between" style="flex-wrap: wrap; gap: 0.75rem;">
+          <div>
+            <h1 id="patient-name" style="margin:0;">Cargando paciente…</h1>
+            <p class="text-muted" id="patient-meta"></p>
+          </div>
+          <div class="flex gap-1" style="flex-wrap: wrap;">
+            <a class="btn btn-primary" id="new-visit-btn" href="#">Nueva consulta</a>
+            <button class="btn btn-secondary" id="print-btn">Imprimir</button>
+            <button class="btn btn-secondary" id="export-btn">Exportar</button>
+            <button class="btn btn-outline" id="share-btn">Compartir</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Compartir paciente (panel desplegable) -->
+      <section class="card" id="share-card" style="display:none;">
+        <h2>Compartir paciente con otro médico</h2>
+        <form id="share-form">
+          <div class="form-grid">
+            <div>
+              <label for="invitee_email">Email del médico invitado (opcional)</label>
+              <input type="email" id="invitee_email" name="invitee_email" placeholder="colega@clinica.com" />
+            </div>
+            <div>
+              <label for="permission">Permiso</label>
+              <select id="permission" name="permission" required>
+                <option value="lectura">Solo lectura</option>
+                <option value="lectura_edicion">Lectura y edición</option>
+              </select>
+            </div>
+            <div>
+              <label for="expires_at">Fecha de expiración (opcional)</label>
+              <input type="date" id="expires_at" name="expires_at" />
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary">Generar enlace de invitación</button>
+        </form>
+        <h3 class="mt-1">Accesos compartidos</h3>
+        <div id="shares-list"></div>
+      </section>
+
+      <!-- Pestañas: separación clara entre administrativo y clínico -->
+      <div class="tabs">
+        <div class="tab active" data-tab="admin">Datos administrativos</div>
+        <div class="tab" data-tab="visits">Consultas</div>
+        <div class="tab" data-tab="clinical">Ficha clínica</div>
+        <div class="tab" data-tab="refraction">Refracción</div>
+        <div class="tab" data-tab="prescriptions">Medicación</div>
+        <div class="tab" data-tab="studies">Estudios</div>
+        <div class="tab" data-tab="biometry">Biometría / Microscopía</div>
+        <div class="tab" data-tab="files">Archivos</div>
+      </div>
+
+      <!-- Panel: Datos administrativos -->
+      <div class="tab-panel active" id="panel-admin">
+        <div class="card">
+          <h2>Datos administrativos</h2>
+          <form id="patient-admin-form">
+            <div class="form-grid">
+              <div>
+                <label for="first_name">Nombre *</label>
+                <input type="text" id="first_name" name="first_name" required />
+              </div>
+              <div>
+                <label for="last_name">Apellido *</label>
+                <input type="text" id="last_name" name="last_name" required />
+              </div>
+              <div>
+                <label for="document_id">Cédula / documento</label>
+                <input type="text" id="document_id" name="document_id" />
+              </div>
+              <div>
+                <label for="birth_date">Fecha de nacimiento</label>
+                <input type="date" id="birth_date" name="birth_date" />
+              </div>
+              <div>
+                <label for="sex">Sexo</label>
+                <select id="sex" name="sex">
+                  <option value="">Seleccionar…</option>
+                  <option value="F">Femenino</option>
+                  <option value="M">Masculino</option>
+                  <option value="OTRO">Otro</option>
+                </select>
+              </div>
+              <div>
+                <label for="phone">Teléfono</label>
+                <input type="tel" id="phone" name="phone" />
+              </div>
+              <div>
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" />
+              </div>
+              <div>
+                <label for="address">Dirección</label>
+                <input type="text" id="address" name="address" />
+              </div>
+              <div>
+                <label for="emergency_contact">Contacto de emergencia</label>
+                <input type="text" id="emergency_contact" name="emergency_contact" />
+              </div>
+              <div>
+                <label for="health_insurance">Seguro médico</label>
+                <input type="text" id="health_insurance" name="health_insurance" />
+              </div>
+              <div>
+                <label for="insurance_member_number">Número de afiliado</label>
+                <input type="text" id="insurance_member_number" name="insurance_member_number" />
+              </div>
+              <div class="full">
+                <label for="admin_notes">Observaciones administrativas</label>
+                <textarea id="admin_notes" name="admin_notes" rows="3"></textarea>
+              </div>
+            </div>
+            <div class="flex gap-1">
+              <button type="submit" class="btn btn-primary">Guardar cambios</button>
+              <button type="button" class="btn btn-danger" id="archive-btn">Archivar paciente</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Panel: Historial de consultas -->
+      <div class="tab-panel" id="panel-visits">
+        <div class="card">
+          <div class="flex-between">
+            <h2>Historial de consultas</h2>
+            <a class="btn btn-primary" id="new-visit-btn-2" href="#">Nueva consulta</a>
+          </div>
+          <div id="visits-history">
+            <p class="text-muted">Cargando historial…</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Panel: Ficha clínica -->
+      <div class="tab-panel" id="panel-clinical">
+        <div class="card">
+          <h2>Nueva ficha clínica</h2>
+          <form id="clinical-form">
+            <div class="form-grid">
+              <div class="full"><label>Motivo de consulta</label><input type="text" name="reason" /></div>
+              <div class="full"><label>Enfermedad actual</label><textarea name="current_illness" rows="2"></textarea></div>
+              <div><label>Antecedentes personales</label><textarea name="personal_history" rows="2"></textarea></div>
+              <div><label>Antecedentes oftalmológicos</label><textarea name="ophthalmic_history" rows="2"></textarea></div>
+              <div><label>Antecedentes familiares</label><textarea name="family_history" rows="2"></textarea></div>
+              <div><label>Alergias</label><input type="text" name="allergies" /></div>
+              <div><label>Cirugías previas</label><input type="text" name="previous_surgeries" /></div>
+              <div><label>Enfermedades sistémicas</label><input type="text" name="systemic_diseases" /></div>
+              <div class="full"><label>Medicación actual</label><input type="text" name="current_medication" /></div>
+              <div><label>AV sin corrección</label><input type="text" name="va_uncorrected" /></div>
+              <div><label>AV con corrección</label><input type="text" name="va_corrected" /></div>
+              <div><label>PIO OD</label><input type="text" name="iop_od" /></div>
+              <div><label>PIO OI</label><input type="text" name="iop_oi" /></div>
+              <div class="full"><label>Biomicroscopía</label><textarea name="biomicroscopy" rows="2"></textarea></div>
+              <div class="full"><label>Fondo de ojo</label><textarea name="fundus" rows="2"></textarea></div>
+              <div class="full"><label>Diagnóstico</label><textarea name="diagnosis" rows="2"></textarea></div>
+              <div class="full"><label>Conducta médica</label><textarea name="medical_plan" rows="2"></textarea></div>
+            </div>
+            <button type="submit" class="btn btn-primary" data-label="Guardar ficha clínica">Guardar ficha clínica</button>
+          </form>
+        </div>
+        <h3>Historial</h3>
+        <div id="clinical-list"></div>
+      </div>
+
+      <!-- Panel: Refracción -->
+      <div class="tab-panel" id="panel-refraction">
+        <div class="card">
+          <h2>Nueva receta de lentes</h2>
+          <form id="refraction-form">
+            <h3>Ojo derecho (OD)</h3>
+            <div class="form-grid">
+              <div><label>Esfera</label><input type="text" name="od_sphere" /></div>
+              <div><label>Cilindro</label><input type="text" name="od_cylinder" /></div>
+              <div><label>Eje</label><input type="text" name="od_axis" /></div>
+              <div><label>Adición</label><input type="text" name="od_addition" /></div>
+              <div><label>AV final</label><input type="text" name="od_final_va" /></div>
+            </div>
+            <h3>Ojo izquierdo (OI)</h3>
+            <div class="form-grid">
+              <div><label>Esfera</label><input type="text" name="oi_sphere" /></div>
+              <div><label>Cilindro</label><input type="text" name="oi_cylinder" /></div>
+              <div><label>Eje</label><input type="text" name="oi_axis" /></div>
+              <div><label>Adición</label><input type="text" name="oi_addition" /></div>
+              <div><label>AV final</label><input type="text" name="oi_final_va" /></div>
+            </div>
+            <div class="form-grid">
+              <div><label>Distancia pupilar</label><input type="text" name="pupillary_distance" /></div>
+              <div><label>Tipo de lente</label><input type="text" name="lens_type" /></div>
+              <div><label>Uso indicado</label><input type="text" name="intended_use" /></div>
+              <div><label>Fecha de emisión</label><input type="date" name="issue_date" /></div>
+              <div class="full"><label>Observaciones</label><textarea name="notes" rows="2"></textarea></div>
+            </div>
+            <button type="submit" class="btn btn-primary" data-label="Guardar refracción">Guardar refracción</button>
+          </form>
+        </div>
+        <h3>Historial</h3>
+        <div id="refraction-list"></div>
+      </div>
+
+      <!-- Panel: Medicación -->
+      <div class="tab-panel" id="panel-prescriptions">
+        <div class="card">
+          <h2>Nueva indicación / receta médica</h2>
+          <form id="prescription-form">
+            <div class="form-grid">
+              <div><label>Medicamento *</label><input type="text" name="medication" required /></div>
+              <div><label>Presentación</label><input type="text" name="presentation" /></div>
+              <div><label>Dosis</label><input type="text" name="dose" /></div>
+              <div><label>Frecuencia</label><input type="text" name="frequency" /></div>
+              <div><label>Duración</label><input type="text" name="duration" /></div>
+              <div><label>Fecha</label><input type="date" name="prescription_date" /></div>
+              <div class="full"><label>Indicaciones adicionales</label><textarea name="additional_instructions" rows="2"></textarea></div>
+            </div>
+            <button type="submit" class="btn btn-primary" data-label="Guardar indicación">Guardar indicación</button>
+          </form>
+        </div>
+        <h3>Historial</h3>
+        <div id="prescription-list"></div>
+      </div>
+
+      <!-- Panel: Estudios -->
+      <div class="tab-panel" id="panel-studies">
+        <div class="card">
+          <h2>Solicitar estudio oftalmológico</h2>
+          <form id="ophthalmic-study-form">
+            <div class="form-grid">
+              <div>
+                <label>Estudio</label>
+                <select name="study_name">
+                  <option>OCT</option><option>Campo visual</option><option>Retinografía</option>
+                  <option>Topografía corneal</option><option>Paquimetría</option><option>Ecografía ocular</option>
+                  <option>Angiografía</option><option>IOL Master</option><option>Argos</option><option>Otro</option>
+                </select>
+              </div>
+              <div>
+                <label>Ojo</label>
+                <select name="eye"><option value="OD">OD</option><option value="OI">OI</option><option value="AMBOS">Ambos</option></select>
+              </div>
+              <div><label>Fecha</label><input type="date" name="study_date" /></div>
+              <div class="full"><label>Diagnóstico presuntivo</label><input type="text" name="presumptive_diagnosis" /></div>
+              <div class="full"><label>Observaciones</label><textarea name="notes" rows="2"></textarea></div>
+            </div>
+            <button type="submit" class="btn btn-primary" data-label="Guardar solicitud">Guardar solicitud</button>
+          </form>
+        </div>
+        <div id="ophthalmic-study-list"></div>
+
+        <div class="card mt-1">
+          <h2>Solicitar estudios prequirúrgicos</h2>
+          <form id="presurgical-study-form">
+            <div class="form-grid">
+              <div class="full">
+                <label>Estudios solicitados (separados por coma)</label>
+                <input type="text" name="requested_studies" placeholder="Hemograma, Glicemia, ECG, Riesgo quirúrgico…" />
+              </div>
+              <div><label>Fecha</label><input type="date" name="request_date" /></div>
+              <div class="full"><label>Observaciones</label><textarea name="notes" rows="2"></textarea></div>
+            </div>
+            <button type="submit" class="btn btn-primary" data-label="Guardar solicitud">Guardar solicitud</button>
+          </form>
+        </div>
+        <div id="presurgical-study-list"></div>
+
+        <div class="card mt-1">
+          <h2>Evaluación clínica preoperatoria</h2>
+          <form id="preop-eval-form">
+            <div class="form-grid">
+              <div class="full"><label>Diagnóstico oftalmológico</label><input type="text" name="ophthalmic_diagnosis" /></div>
+              <div class="full"><label>Cirugía propuesta</label><input type="text" name="proposed_surgery" /></div>
+              <div><label>Anestesia sugerida</label><input type="text" name="suggested_anesthesia" /></div>
+              <div><label>Fecha</label><input type="date" name="evaluation_date" /></div>
+              <div class="full"><label>Estudios solicitados</label><input type="text" name="requested_studies" /></div>
+              <div class="full"><label>Observaciones</label><textarea name="notes" rows="2"></textarea></div>
+            </div>
+            <button type="submit" class="btn btn-primary" data-label="Guardar evaluación">Guardar evaluación</button>
+          </form>
+        </div>
+        <div id="preop-eval-list"></div>
+      </div>
+
+      <!-- Panel: Biometría / Microscopía -->
+      <div class="tab-panel" id="panel-biometry">
+        <div class="card">
+          <h2>Nueva biometría</h2>
+          <form id="biometry-form">
+            <div class="form-grid">
+              <div><label>Ojo</label><select name="eye"><option value="OD">OD</option><option value="OI">OI</option></select></div>
+              <div><label>K1</label><input type="text" name="k1" /></div>
+              <div><label>K2</label><input type="text" name="k2" /></div>
+              <div><label>Longitud axial</label><input type="text" name="axial_length" /></div>
+              <div><label>Cámara anterior</label><input type="text" name="anterior_chamber" /></div>
+              <div><label>Blanco a blanco</label><input type="text" name="white_to_white" /></div>
+              <div><label>ACD</label><input type="text" name="acd" /></div>
+              <div><label>Fórmula usada</label><input type="text" name="formula_used" /></div>
+              <div><label>LIO sugerida</label><input type="text" name="suggested_iol" /></div>
+              <div><label>Poder del LIO</label><input type="text" name="iol_power" /></div>
+              <div><label>Target refractivo</label><input type="text" name="refractive_target" /></div>
+              <div><label>Equipo usado</label><input type="text" name="device_used" placeholder="IOL Master, Argos…" /></div>
+              <div class="full"><label>Observaciones</label><textarea name="notes" rows="2"></textarea></div>
+            </div>
+            <button type="submit" class="btn btn-primary" data-label="Guardar biometría">Guardar biometría</button>
+          </form>
+        </div>
+        <div id="biometry-list"></div>
+
+        <div class="card mt-1">
+          <h2>Nueva microscopía especular</h2>
+          <form id="specular-form">
+            <div class="form-grid">
+              <div><label>Ojo</label><select name="eye"><option value="OD">OD</option><option value="OI">OI</option></select></div>
+              <div><label>Densidad celular endotelial</label><input type="text" name="endothelial_cell_density" /></div>
+              <div><label>Coeficiente de variación</label><input type="text" name="variation_coefficient" /></div>
+              <div><label>Hexagonalidad</label><input type="text" name="hexagonality" /></div>
+              <div><label>Paquimetría</label><input type="text" name="pachymetry" /></div>
+              <div class="full"><label>Interpretación</label><textarea name="interpretation" rows="2"></textarea></div>
+              <div class="full"><label>Observaciones</label><textarea name="notes" rows="2"></textarea></div>
+            </div>
+            <button type="submit" class="btn btn-primary" data-label="Guardar registro">Guardar registro</button>
+          </form>
+        </div>
+        <div id="specular-list"></div>
+      </div>
+
+      <!-- Panel: Archivos adjuntos -->
+      <div class="tab-panel" id="panel-files">
+        <div class="card">
+          <h2>Subir archivo</h2>
+          <form id="file-upload-form">
+            <div class="form-grid">
+              <div>
+                <label>Tipo de archivo</label>
+                <select name="file_type">
+                  <option>OCT</option><option>IOL Master</option><option>Argos</option>
+                  <option>Informe médico</option><option>Resultado de laboratorio</option>
+                  <option>Foto del paciente</option><option>Imagen clínica</option><option>PDF</option><option>Otro</option>
+                </select>
+              </div>
+              <div>
+                <label>Módulo asociado</label>
+                <select name="module_name">
+                  <option value="">General / paciente</option>
+                  <option value="biometry">Biometría</option>
+                  <option value="specular_microscopy">Microscopía especular</option>
+                  <option value="studies">Estudios</option>
+                  <option value="surgery">Cirugía</option>
+                </select>
+              </div>
+              <div class="full"><label>Descripción</label><input type="text" name="description" /></div>
+              <div class="full"><label>Archivo</label><input type="file" id="file-input" name="file" required /></div>
+            </div>
+            <button type="submit" class="btn btn-primary" data-label="Subir archivo">Subir archivo</button>
+          </form>
+        </div>
+        <h3>Archivos del paciente</h3>
+        <div class="chip-group" id="file-type-filters"></div>
+        <div id="files-gallery"></div>
+      </div>
+    </main>
+  </div>
+
+  <script src="js/config.js"></script>
+  <script type="module">
+    import { requireAuth, signOut } from './js/auth.js';
+    import { getPatientById, updatePatient, archivePatient } from './js/patients.js';
+    import { loadPatientVisitsPanel } from './js/visits.js';
+    import { showAlert, calculateAge, formatDate, escapeHtml } from './js/utils.js';
+    import { initClinicalPanel } from './js/clinical.js';
+    import { initRefractionPanel } from './js/refractions.js';
+    import { initPrescriptionsPanel } from './js/prescriptions.js';
+    import { initStudiesPanel } from './js/studies.js';
+    import { initBiometryPanel } from './js/biometry.js';
+    import { initSpecularPanel } from './js/specular.js';
+    import { initFilesPanel } from './js/files.js';
+    import { initSharingPanel } from './js/sharing.js';
+    import { printFullPatientFile, exportPatient, wirePrintButtons } from './js/printing.js';
+
+    const params = new URLSearchParams(window.location.search);
+    const patientId = params.get('id');
+
+    (async () => {
+      await requireAuth();
+
+      if (!patientId) {
+        showAlert('alert-box', 'No se especificó un paciente.', 'error', 0);
+        return;
+      }
+
+      const patient = await getPatientById(patientId);
+      if (!patient) {
+        showAlert('alert-box', 'No se pudo cargar el paciente o no tienes acceso.', 'error', 0);
+        return;
+      }
+
+      renderHeader(patient);
+      fillAdminForm(patient);
+      wireQuickLinks(patient);
+      await loadPatientVisitsPanel('visits-history', patient.id);
+
+      // Inicializar módulos clínicos del paciente
+      await initClinicalPanel(patient.id);
+      await initRefractionPanel(patient.id);
+      await initPrescriptionsPanel(patient.id);
+      await initStudiesPanel(patient.id);
+      await initBiometryPanel(patient.id);
+      await initSpecularPanel(patient.id);
+      await initFilesPanel(patient.id);
+      await initSharingPanel(patient.id);
+
+      // Delegación de eventos para botones "Imprimir" de cada módulo
+      wirePrintButtons('#panel-clinical', patient);
+      wirePrintButtons('#panel-refraction', patient);
+      wirePrintButtons('#panel-prescriptions', patient);
+      wirePrintButtons('#panel-studies', patient);
+      wirePrintButtons('#panel-biometry', patient);
+
+      // Compartir paciente
+      document.getElementById('share-btn')?.addEventListener('click', () => {
+        const card = document.getElementById('share-card');
+        card.style.display = card.style.display === 'none' ? 'block' : 'none';
+      });
+
+      // Exportar paciente (registra la exportación y genera la vista imprimible)
+      document.getElementById('export-btn')?.addEventListener('click', async () => {
+        await exportPatient(patient, 'todo');
+        showAlert('alert-box', 'Exportación registrada. Generando documento para imprimir/guardar como PDF…', 'success');
+      });
+
+      // Pestañas
+      document.querySelectorAll('.tab').forEach((tab) => {
+        tab.addEventListener('click', () => {
+          document.querySelectorAll('.tab').forEach((t) => t.classList.remove('active'));
+          document.querySelectorAll('.tab-panel').forEach((p) => p.classList.remove('active'));
+          tab.classList.add('active');
+          document.getElementById(`panel-${tab.dataset.tab}`)?.classList.add('active');
+        });
+      });
+
+      // Guardar datos administrativos
+      const form = document.getElementById('patient-admin-form');
+      form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const submitBtn = form.querySelector('button[type="submit"]');
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Guardando...';
+
+        const formData = new FormData(form);
+        const data = Object.fromEntries(formData.entries());
+        const result = await updatePatient(patientId, data);
+
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Guardar cambios';
+
+        if (result.error) {
+          showAlert('alert-box', result.error, 'error');
+        } else {
+          showAlert('alert-box', 'Datos del paciente actualizados correctamente.', 'success');
+          const updated = await getPatientById(patientId);
+          renderHeader(updated);
+        }
+      });
+
+      // Archivar paciente
+      document.getElementById('archive-btn')?.addEventListener('click', async () => {
+        if (!confirm('¿Archivar este paciente? Podrás seguir viendo su historial, pero no aparecerá en el listado principal.')) return;
+        const result = await archivePatient(patientId);
+        if (result.error) showAlert('alert-box', result.error, 'error');
+        else {
+          showAlert('alert-box', 'Paciente archivado correctamente.', 'success');
+          setTimeout(() => { window.location.href = 'dashboard.html'; }, 1200);
+        }
+      });
+
+      document.getElementById('logout-link')?.addEventListener('click', (e) => {
+        e.preventDefault();
+        signOut();
+      });
+    })();
+
+    function renderHeader(patient) {
+      const age = calculateAge(patient.birth_date);
+      document.getElementById('patient-name').textContent =
+        `${patient.last_name}, ${patient.first_name}`;
+      document.getElementById('patient-meta').innerHTML =
+        `${age != null ? age + ' años · ' : ''}` +
+        `${escapeHtml(patient.document_id || 'Sin documento')} · ` +
+        `Última consulta: ${escapeHtml(patient.last_visit_at ? formatDate(patient.last_visit_at) : 'Sin consultas')}`;
+    }
+
+    function fillAdminForm(patient) {
+      const form = document.getElementById('patient-admin-form');
+      Object.keys(patient).forEach((key) => {
+        const input = form.elements.namedItem(key);
+        if (input && patient[key] != null) input.value = patient[key];
+      });
+    }
+
+    function wireQuickLinks(patient) {
+      const url = `visit.html?patient=${encodeURIComponent(patient.id)}`;
+      document.getElementById('new-visit-btn').setAttribute('href', url);
+      document.getElementById('new-visit-btn-2').setAttribute('href', url);
+      document.getElementById('print-btn')?.addEventListener('click', () => printFullPatientFile(patient));
+    }
+  </script>
+</body>
+</html>

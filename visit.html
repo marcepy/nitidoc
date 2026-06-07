@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nitidoc — Nueva consulta</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="css/print.css" />
+  <style>.hidden-section { display: none; }</style>
+</head>
+<body>
+  <div class="app-layout">
+    <aside class="sidebar">
+      <div class="brand">Nitidoc</div>
+      <nav>
+        <a href="dashboard.html">Pacientes</a>
+        <a href="visit.html" class="active">Nueva consulta</a>
+        <a href="templates.html">Plantillas</a>
+        <a href="settings.html">Configuración</a>
+        <a href="#" id="logout-link">Cerrar sesión</a>
+      </nav>
+    </aside>
+
+    <header class="topbar">
+      <span class="brand">Nitidoc</span>
+      <button class="hamburger" aria-label="Abrir menú">☰</button>
+    </header>
+
+    <main class="main-content">
+      <h1 id="visit-form-title">Nueva consulta</h1>
+      <div id="alert-box"></div>
+
+      <!-- Selección de paciente (solo si no se llega desde su ficha) -->
+      <section class="card hidden-section" id="patient-picker">
+        <h2>Seleccionar paciente</h2>
+        <label for="visit-patient-select">Paciente</label>
+        <select id="visit-patient-select"></select>
+        <p class="text-muted">¿No encuentras al paciente? <a href="dashboard.html">Créalo primero desde el panel principal</a>.</p>
+      </section>
+
+      <form id="visit-form">
+        <section class="card">
+          <h2>Motivo y enfermedad actual</h2>
+          <div class="form-grid">
+            <div>
+              <label for="visit_date">Fecha y hora de la consulta</label>
+              <input type="datetime-local" id="visit_date" name="visit_date" />
+            </div>
+            <div>
+              <label for="responsible_doctor">Médico responsable</label>
+              <input type="text" id="responsible_doctor" name="responsible_doctor" />
+            </div>
+            <div class="full">
+              <label for="reason">Motivo de consulta</label>
+              <input type="text" id="reason" name="reason" />
+            </div>
+            <div class="full">
+              <label for="current_illness">Enfermedad actual</label>
+              <textarea id="current_illness" name="current_illness" rows="2"></textarea>
+            </div>
+          </div>
+        </section>
+
+        <section class="card">
+          <h2>Agudeza visual y presión intraocular</h2>
+          <div class="form-grid">
+            <div>
+              <label for="va_od_uncorrected">AV OD sin corrección</label>
+              <input type="text" id="va_od_uncorrected" name="va_od_uncorrected" />
+            </div>
+            <div>
+              <label for="va_oi_uncorrected">AV OI sin corrección</label>
+              <input type="text" id="va_oi_uncorrected" name="va_oi_uncorrected" />
+            </div>
+            <div>
+              <label for="va_od_corrected">AV OD con corrección</label>
+              <input type="text" id="va_od_corrected" name="va_od_corrected" />
+            </div>
+            <div>
+              <label for="va_oi_corrected">AV OI con corrección</label>
+              <input type="text" id="va_oi_corrected" name="va_oi_corrected" />
+            </div>
+            <div>
+              <label for="iop_od">Presión intraocular OD</label>
+              <input type="text" id="iop_od" name="iop_od" />
+            </div>
+            <div>
+              <label for="iop_oi">Presión intraocular OI</label>
+              <input type="text" id="iop_oi" name="iop_oi" />
+            </div>
+          </div>
+        </section>
+
+        <section class="card">
+          <h2>Examen clínico</h2>
+          <div class="form-grid">
+            <div class="full">
+              <label for="biomicroscopy">Biomicroscopía</label>
+              <textarea id="biomicroscopy" name="biomicroscopy" rows="2"></textarea>
+            </div>
+            <div class="full">
+              <label for="fundus">Fondo de ojo</label>
+              <textarea id="fundus" name="fundus" rows="2"></textarea>
+            </div>
+          </div>
+        </section>
+
+        <section class="card">
+          <h2>Diagnóstico y conducta</h2>
+          <div class="form-grid">
+            <div class="full">
+              <label for="diagnosis">Diagnóstico</label>
+              <textarea id="diagnosis" name="diagnosis" rows="2"></textarea>
+            </div>
+            <div class="full">
+              <label for="medical_plan">Conducta médica</label>
+              <textarea id="medical_plan" name="medical_plan" rows="2"></textarea>
+            </div>
+            <div class="full">
+              <label for="instructions">Indicaciones</label>
+              <textarea id="instructions" name="instructions" rows="2"></textarea>
+            </div>
+            <div>
+              <label for="next_control_at">Próximo control</label>
+              <input type="date" id="next_control_at" name="next_control_at" />
+            </div>
+          </div>
+        </section>
+
+        <div class="flex gap-1 mb-1">
+          <button type="submit" class="btn btn-primary">Guardar consulta</button>
+          <button type="button" class="btn btn-secondary" id="print-visit-btn">Guardar e imprimir indicaciones</button>
+          <a class="btn btn-outline" href="dashboard.html">Cancelar</a>
+        </div>
+      </form>
+
+      <p class="text-muted" style="font-size:0.85rem;">
+        Al guardar la consulta, se actualizará automáticamente el historial
+        del paciente y la fecha de su última visita en Nitidoc.
+      </p>
+    </main>
+  </div>
+
+  <script src="js/config.js"></script>
+  <script type="module">
+    import { requireAuth, signOut } from './js/auth.js';
+    import { initVisitPage } from './js/visits.js';
+
+    (async () => {
+      await requireAuth();
+      await initVisitPage();
+      document.getElementById('logout-link')?.addEventListener('click', (e) => {
+        e.preventDefault();
+        signOut();
+      });
+    })();
+  </script>
+</body>
+</html>

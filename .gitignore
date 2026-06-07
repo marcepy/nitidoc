@@ -1,0 +1,7 @@
+# Configuración local con credenciales del proyecto Supabase (clave anon pública,
+# pero se mantiene fuera del repo para permitir distintos entornos sin conflictos)
+js/config.js
+
+# Archivos del sistema
+.DS_Store
+node_modules/

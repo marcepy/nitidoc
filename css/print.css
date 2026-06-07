@@ -1,0 +1,197 @@
+/* =====================================================================
+   NITIDOC — Estilos de impresión (@media print)
+   Aplican a documentos médicos imprimibles: fichas, recetas,
+   solicitudes de estudios, evaluaciones, biometría, microscopía, etc.
+
+   Convención: el contenido a imprimir se arma dentro de un contenedor
+   con clase ".print-sheet", oculto en pantalla y mostrado solo al
+   imprimir (ver printing.js).
+   ===================================================================== */
+
+.print-sheet { display: none; }
+
+@media print {
+
+  /* Ocultar toda la interfaz de la aplicación */
+  .app-layout, .topbar, .sidebar, .no-print, nav, header, footer.app-footer {
+    display: none !important;
+  }
+
+  body {
+    background: #ffffff;
+    color: #000000;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 12pt;
+  }
+
+  /* Mostrar solo la hoja imprimible activa */
+  .print-sheet.active {
+    display: block;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+  .print-page {
+    page-break-after: always;
+    padding: 1.5cm;
+  }
+
+  .print-page:last-child { page-break-after: auto; }
+
+  /* Encabezado del documento: logo + datos del médico/clínica */
+  .print-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 2px solid #2563eb;
+    padding-bottom: 0.5cm;
+    margin-bottom: 0.6cm;
+  }
+
+  .print-header img.logo {
+    max-height: 2.2cm;
+    max-width: 4cm;
+    object-fit: contain;
+  }
+
+  .print-header .doctor-info {
+    text-align: right;
+    font-size: 10pt;
+    line-height: 1.4;
+  }
+
+  .print-header .doctor-info .doctor-name {
+    font-size: 13pt;
+    font-weight: bold;
+  }
+
+  /* Título del documento (ej: "Receta de lentes", "Ficha clínica") */
+  .print-title {
+    text-align: center;
+    font-size: 14pt;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin: 0.4cm 0 0.6cm;
+    color: #1d4ed8;
+  }
+
+  /* Datos del paciente */
+  .print-patient-box {
+    border: 1px solid #cbd5e1;
+    border-radius: 4px;
+    padding: 0.4cm 0.6cm;
+    margin-bottom: 0.6cm;
+    font-size: 10.5pt;
+  }
+
+  .print-patient-box .row {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.3cm;
+  }
+
+  /* Secciones clínicas */
+  .print-section {
+    margin-bottom: 0.5cm;
+  }
+
+  .print-section h3 {
+    font-size: 11.5pt;
+    color: #1d4ed8;
+    border-bottom: 1px solid #cbd5e1;
+    padding-bottom: 0.1cm;
+    margin-bottom: 0.25cm;
+  }
+
+  .print-section p, .print-section .field {
+    margin: 0.15cm 0;
+    font-size: 10.5pt;
+  }
+
+  .print-section .field strong { display: inline-block; min-width: 4cm; }
+
+  /* Tablas de datos (ej. refracción OD/OI, agudeza visual) */
+  .print-sheet table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0.3cm 0;
+    font-size: 10pt;
+  }
+
+  .print-sheet th, .print-sheet td {
+    border: 1px solid #cbd5e1;
+    padding: 0.2cm 0.3cm;
+    text-align: left;
+  }
+
+  .print-sheet th { background: #e5f4ea; }
+
+  /* Texto legal / aclaratorio de la plantilla */
+  .print-legal {
+    font-size: 8.5pt;
+    color: #475569;
+    margin-top: 0.5cm;
+    font-style: italic;
+  }
+
+  /* Firma y sello */
+  .print-signature-block {
+    margin-top: 1.2cm;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+
+  .print-signature-block .signature {
+    text-align: center;
+  }
+
+  .print-signature-block img.signature-img {
+    max-height: 2cm;
+    display: block;
+    margin: 0 auto 0.1cm;
+  }
+
+  .print-signature-block .signature-line {
+    border-top: 1px solid #000;
+    width: 6cm;
+    margin: 0 auto;
+    padding-top: 0.1cm;
+    font-size: 9pt;
+  }
+
+  .print-signature-block .stamp-box {
+    border: 1px dashed #94a3b8;
+    border-radius: 4px;
+    width: 4.5cm;
+    height: 2.5cm;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 8.5pt;
+    color: #94a3b8;
+  }
+
+  /* Pie de página de la plantilla */
+  .print-footer {
+    margin-top: 0.6cm;
+    border-top: 1px solid #cbd5e1;
+    padding-top: 0.25cm;
+    font-size: 8.5pt;
+    color: #475569;
+    text-align: center;
+  }
+
+  /* Evitar cortes de elementos a mitad de página */
+  .print-section, .print-patient-box, .print-signature-block, table, tr {
+    break-inside: avoid;
+  }
+
+  @page {
+    size: A4;
+    margin: 1.5cm;
+  }
+}

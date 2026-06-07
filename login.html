@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nitidoc — Acceso</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <div class="login-wrapper">
+    <div class="login-card">
+      <div class="brand">Nitidoc</div>
+      <p class="tagline">Gestión oftalmológica clara, segura y rápida</p>
+
+      <div id="alert-box"></div>
+
+      <form id="login-form">
+        <label for="login-email">Email del médico</label>
+        <input
+          type="email"
+          id="login-email"
+          name="email"
+          placeholder="doctor@clinica.com"
+          required
+          autocomplete="email"
+        />
+        <button type="submit" class="btn btn-primary btn-block">
+          Enviar enlace de acceso
+        </button>
+      </form>
+
+      <p class="text-muted mt-1" style="font-size: 0.8rem;">
+        Te enviaremos un enlace seguro a tu correo para ingresar sin contraseña.
+        Nitidoc protege la información de tus pacientes mediante autenticación
+        segura y políticas de acceso por médico.
+      </p>
+    </div>
+  </div>
+
+  <script src="js/config.js"></script>
+  <script type="module">
+    import { initLoginForm } from './js/auth.js';
+    initLoginForm();
+  </script>
+</body>
+</html>
