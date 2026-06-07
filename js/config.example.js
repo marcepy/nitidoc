@@ -17,6 +17,6 @@
 // =====================================================================
 
 window.NITIDOC_CONFIG = {
-  SUPABASE_URL: 'https://TU-PROYECTO.supabase.co',
-  SUPABASE_ANON_KEY: 'TU-ANON-KEY-PUBLICA',
+  SUPABASE_URL: 'https://qytqsbwqzpteocjqxvtk.supabase.co',
+  SUPABASE_ANON_KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF5dHFzYndxenB0ZW9janF4dnRrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA4MDM1MTMsImV4cCI6MjA5NjM3OTUxM30.l19k6I6ikZc5oNcG7AFQ1xt6sI1tpmDK51_LLvpM5IE',
 };
