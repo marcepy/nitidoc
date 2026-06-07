@@ -346,14 +346,19 @@ export function initLoginForm() {
       demoBtn.disabled = true;
       demoBtn.textContent = 'Ingresando a la demo...';
 
-      const result = await signInDemo();
-
-      if (result.error) {
+      try {
+        const result = await signInDemo();
+        if (result.error) {
+          showAlert('alert-box', result.error, 'error');
+        }
+        // Si tiene éxito, onAuthStateChange redirige al dashboard.
+      } catch (err) {
+        console.error('[Nitidoc][auth] Error inesperado en acceso demo:', err);
+        showAlert('alert-box', 'No se pudo acceder a la demo. Intenta nuevamente.', 'error');
+      } finally {
         demoBtn.disabled = false;
         demoBtn.textContent = 'Entrar como demo';
-        showAlert('alert-box', result.error, 'error');
       }
-      // Si tiene éxito, onAuthStateChange redirige al dashboard.
     });
   }
 
