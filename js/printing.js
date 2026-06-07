@@ -238,7 +238,6 @@ function sectionVisit(r) {
 }
 
 const SECTION_BUILDERS = {
-  clinical_record: sectionClinicalRecord,
   refraction: sectionRefraction,
   prescription: sectionPrescription,
   ophthalmic_study: sectionOphthalmicStudy,
