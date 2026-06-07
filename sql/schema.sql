@@ -43,6 +43,7 @@ create table if not exists profiles (
   updated_at timestamptz not null default now()
 );
 
+drop trigger if exists trg_profiles_updated_at on profiles;
 create trigger trg_profiles_updated_at
 before update on profiles
 for each row execute function set_updated_at();
@@ -76,6 +77,7 @@ create index if not exists idx_patients_last_name on patients(last_name);
 create index if not exists idx_patients_document_id on patients(document_id);
 create index if not exists idx_patients_last_visit_at on patients(last_visit_at);
 
+drop trigger if exists trg_patients_updated_at on patients;
 create trigger trg_patients_updated_at
 before update on patients
 for each row execute function set_updated_at();
@@ -120,6 +122,7 @@ create index if not exists idx_visits_doctor_id on visits(doctor_id);
 create index if not exists idx_visits_patient_id on visits(patient_id);
 create index if not exists idx_visits_visit_date on visits(visit_date);
 
+drop trigger if exists trg_visits_updated_at on visits;
 create trigger trg_visits_updated_at
 before update on visits
 for each row execute function set_updated_at();
@@ -141,6 +144,7 @@ begin
 end;
 $$;
 
+drop trigger if exists trg_visits_update_last_visit on visits;
 create trigger trg_visits_update_last_visit
 after insert or update of visit_date on visits
 for each row execute function update_patient_last_visit();
@@ -178,6 +182,7 @@ create index if not exists idx_clinical_records_patient_id on clinical_records(p
 create index if not exists idx_clinical_records_doctor_id on clinical_records(doctor_id);
 create index if not exists idx_clinical_records_visit_id on clinical_records(visit_id);
 
+drop trigger if exists trg_clinical_records_updated_at on clinical_records;
 create trigger trg_clinical_records_updated_at
 before update on clinical_records
 for each row execute function set_updated_at();
@@ -212,6 +217,7 @@ create table if not exists refractions (
 create index if not exists idx_refractions_patient_id on refractions(patient_id);
 create index if not exists idx_refractions_doctor_id on refractions(doctor_id);
 
+drop trigger if exists trg_refractions_updated_at on refractions;
 create trigger trg_refractions_updated_at
 before update on refractions
 for each row execute function set_updated_at();
@@ -238,6 +244,7 @@ create table if not exists prescriptions (
 create index if not exists idx_prescriptions_patient_id on prescriptions(patient_id);
 create index if not exists idx_prescriptions_doctor_id on prescriptions(doctor_id);
 
+drop trigger if exists trg_prescriptions_updated_at on prescriptions;
 create trigger trg_prescriptions_updated_at
 before update on prescriptions
 for each row execute function set_updated_at();
@@ -262,6 +269,7 @@ create table if not exists ophthalmic_studies (
 create index if not exists idx_ophthalmic_studies_patient_id on ophthalmic_studies(patient_id);
 create index if not exists idx_ophthalmic_studies_doctor_id on ophthalmic_studies(doctor_id);
 
+drop trigger if exists trg_ophthalmic_studies_updated_at on ophthalmic_studies;
 create trigger trg_ophthalmic_studies_updated_at
 before update on ophthalmic_studies
 for each row execute function set_updated_at();
@@ -284,6 +292,7 @@ create table if not exists pre_surgical_studies (
 create index if not exists idx_pre_surgical_studies_patient_id on pre_surgical_studies(patient_id);
 create index if not exists idx_pre_surgical_studies_doctor_id on pre_surgical_studies(doctor_id);
 
+drop trigger if exists trg_pre_surgical_studies_updated_at on pre_surgical_studies;
 create trigger trg_pre_surgical_studies_updated_at
 before update on pre_surgical_studies
 for each row execute function set_updated_at();
@@ -309,6 +318,7 @@ create table if not exists preoperative_evaluations (
 create index if not exists idx_preop_eval_patient_id on preoperative_evaluations(patient_id);
 create index if not exists idx_preop_eval_doctor_id on preoperative_evaluations(doctor_id);
 
+drop trigger if exists trg_preop_eval_updated_at on preoperative_evaluations;
 create trigger trg_preop_eval_updated_at
 before update on preoperative_evaluations
 for each row execute function set_updated_at();
@@ -341,6 +351,7 @@ create table if not exists biometry (
 create index if not exists idx_biometry_patient_id on biometry(patient_id);
 create index if not exists idx_biometry_doctor_id on biometry(doctor_id);
 
+drop trigger if exists trg_biometry_updated_at on biometry;
 create trigger trg_biometry_updated_at
 before update on biometry
 for each row execute function set_updated_at();
@@ -367,6 +378,7 @@ create table if not exists specular_microscopy (
 create index if not exists idx_specular_patient_id on specular_microscopy(patient_id);
 create index if not exists idx_specular_doctor_id on specular_microscopy(doctor_id);
 
+drop trigger if exists trg_specular_updated_at on specular_microscopy;
 create trigger trg_specular_updated_at
 before update on specular_microscopy
 for each row execute function set_updated_at();
@@ -411,6 +423,7 @@ create index if not exists idx_patient_shares_owner on patient_shares(owner_doct
 create index if not exists idx_patient_shares_shared_with on patient_shares(shared_with_doctor_id);
 create index if not exists idx_patient_shares_token on patient_shares(token);
 
+drop trigger if exists trg_patient_shares_updated_at on patient_shares;
 create trigger trg_patient_shares_updated_at
 before update on patient_shares
 for each row execute function set_updated_at();
@@ -433,6 +446,7 @@ create index if not exists idx_invitations_inviter on invitations(inviter_doctor
 create index if not exists idx_invitations_email on invitations(invitee_email);
 create index if not exists idx_invitations_token on invitations(token);
 
+drop trigger if exists trg_invitations_updated_at on invitations;
 create trigger trg_invitations_updated_at
 before update on invitations
 for each row execute function set_updated_at();
@@ -463,6 +477,7 @@ create table if not exists doctor_templates (
 create index if not exists idx_doctor_templates_doctor_id on doctor_templates(doctor_id);
 create index if not exists idx_doctor_templates_type on doctor_templates(template_type);
 
+drop trigger if exists trg_doctor_templates_updated_at on doctor_templates;
 create trigger trg_doctor_templates_updated_at
 before update on doctor_templates
 for each row execute function set_updated_at();
