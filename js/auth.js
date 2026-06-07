@@ -382,7 +382,9 @@ export function initLoginForm() {
 
 // Si la sesión cambia (login/logout), Supabase notifica aquí.
 supabase.auth.onAuthStateChange((event, session) => {
-  if (event === 'SIGNED_IN' && window.location.pathname.endsWith('login.html')) {
+  const path = window.location.pathname;
+  const onLoginPage = path.endsWith('login.html') || path.endsWith('/login') || path === '/';
+  if (event === 'SIGNED_IN' && onLoginPage) {
     window.location.href = '/dashboard.html';
   }
   if (event === 'SIGNED_OUT') {
