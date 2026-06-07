@@ -127,11 +127,12 @@
 
   <script src="js/config.js"></script>
   <script type="module">
-    import { requireAuth, signOut } from './js/auth.js';
+    import { requireAuth, signOut, initPinLock } from './js/auth.js';
     import { initPatientsDashboard, initNewPatientForm } from './js/patients.js';
 
     (async () => {
-      await requireAuth();
+      const session = await requireAuth();
+      if (session) initPinLock(session.user.id);
       await initPatientsDashboard();
       initNewPatientForm(() => {
         document.getElementById('new-patient-card').style.display = 'none';

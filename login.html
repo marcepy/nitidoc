@@ -24,15 +24,60 @@
           required
           autocomplete="email"
         />
+        <label for="login-password">Contraseña</label>
+        <input
+          type="password"
+          id="login-password"
+          name="password"
+          placeholder="••••••••"
+          required
+          autocomplete="current-password"
+        />
         <button type="submit" class="btn btn-primary btn-block">
-          Enviar enlace de acceso
+          Ingresar
         </button>
+        <p class="text-muted mt-1" style="font-size: 0.85rem;">
+          ¿No tienes cuenta? <a href="#" id="show-signup">Regístrate</a>
+        </p>
       </form>
 
+      <form id="signup-form" class="hidden">
+        <label for="signup-email">Email del médico</label>
+        <input
+          type="email"
+          id="signup-email"
+          name="email"
+          placeholder="doctor@clinica.com"
+          required
+          autocomplete="email"
+        />
+        <label for="signup-password">Contraseña</label>
+        <input
+          type="password"
+          id="signup-password"
+          name="password"
+          placeholder="Mínimo 8 caracteres"
+          required
+          minlength="8"
+          autocomplete="new-password"
+        />
+        <button type="submit" class="btn btn-primary btn-block">
+          Crear cuenta
+        </button>
+        <p class="text-muted mt-1" style="font-size: 0.85rem;">
+          ¿Ya tienes cuenta? <a href="#" id="show-login">Ingresa aquí</a>
+        </p>
+      </form>
+
+      <div class="login-divider"><span>o</span></div>
+
+      <button type="button" id="demo-access-btn" class="btn btn-outline btn-block">
+        Entrar como demo
+      </button>
+
       <p class="text-muted mt-1" style="font-size: 0.8rem;">
-        Te enviaremos un enlace seguro a tu correo para ingresar sin contraseña.
         Nitidoc protege la información de tus pacientes mediante autenticación
-        segura y políticas de acceso por médico.
+        segura, contraseñas, PIN de bloqueo rápido y políticas de acceso por médico.
       </p>
     </div>
   </div>

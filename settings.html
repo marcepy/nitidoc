@@ -70,6 +70,25 @@
       </section>
 
       <section class="card">
+        <h2>PIN de bloqueo rápido</h2>
+        <p class="text-muted">
+          Configura un PIN de 6 dígitos para desbloquear Nitidoc rápidamente
+          tras un período de inactividad, sin volver a escribir tu contraseña.
+          El PIN se guarda solo en este dispositivo y no reemplaza tu inicio
+          de sesión.
+        </p>
+        <p id="pin-status" class="text-muted mb-1"></p>
+        <form id="pin-form" class="flex gap-1" style="align-items:flex-end; flex-wrap:wrap;">
+          <div>
+            <label for="pin-input">Nuevo PIN (6 dígitos)</label>
+            <input type="password" inputmode="numeric" pattern="\d{6}" maxlength="6" id="pin-input" required style="letter-spacing:0.4rem; max-width:140px;" />
+          </div>
+          <button type="submit" class="btn btn-primary">Guardar PIN</button>
+          <button type="button" id="pin-clear-btn" class="btn btn-outline hidden">Eliminar PIN</button>
+        </form>
+      </section>
+
+      <section class="card">
         <h2>Logo de la clínica</h2>
         <div id="logo-preview" class="mb-1"></div>
         <label for="logo-input">Subir logo (PNG o JPG)</label>

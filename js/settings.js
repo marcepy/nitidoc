@@ -4,7 +4,7 @@
 
 import { supabase } from './supabase.js';
 import { showAlert, escapeHtml } from './utils.js';
-import { getCurrentUser } from './auth.js';
+import { getCurrentUser, hasPin, setPin, clearPin } from './auth.js';
 
 const ASSETS_BUCKET = 'doctor-assets';
 
@@ -152,6 +152,7 @@ export async function initSettingsPage() {
   const profile = await loadProfile();
   if (profile) fillProfileForm(form, profile);
   await renderAssetPreviews(profile);
+  await initPinSection();
 
   form.addEventListener('submit', async (event) => {
     event.preventDefault();
@@ -288,5 +289,50 @@ function initSignatureCanvas() {
       showAlert('alert-box', 'Firma guardada correctamente.', 'success');
       await renderAssetPreviews(await loadProfile());
     }
+  });
+}
+
+/**
+ * Inicializa la sección de PIN de bloqueo rápido (re-autenticación local).
+ * Espera <form id="pin-form"> con <input id="pin-input"> y un botón
+ * <button id="pin-clear-btn"> para eliminar el PIN configurado.
+ */
+async function initPinSection() {
+  const form = document.getElementById('pin-form');
+  if (!form) return;
+
+  const user = await getCurrentUser();
+  if (!user) return;
+
+  const status = document.getElementById('pin-status');
+  const clearBtn = document.getElementById('pin-clear-btn');
+
+  function refreshStatus() {
+    if (status) {
+      status.textContent = hasPin(user.id)
+        ? 'Ya tienes un PIN configurado. Puedes reemplazarlo ingresando uno nuevo.'
+        : 'No tienes un PIN configurado todavía.';
+    }
+    if (clearBtn) clearBtn.classList.toggle('hidden', !hasPin(user.id));
+  }
+  refreshStatus();
+
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const pin = document.getElementById('pin-input').value.trim();
+    const result = await setPin(user.id, pin);
+    if (result.error) {
+      showAlert('alert-box', result.error, 'error');
+    } else {
+      showAlert('alert-box', 'PIN guardado. Se usará para desbloquear la sesión rápidamente.', 'success');
+      form.reset();
+      refreshStatus();
+    }
+  });
+
+  clearBtn?.addEventListener('click', () => {
+    clearPin(user.id);
+    showAlert('alert-box', 'PIN eliminado.', 'success');
+    refreshStatus();
   });
 }
