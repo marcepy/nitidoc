@@ -248,13 +248,27 @@
           <h2>Nueva indicación / receta médica</h2>
           <form id="prescription-form">
             <div class="form-grid">
-              <div><label>Medicamento *</label><input type="text" name="medication" required /></div>
-              <div><label>Presentación</label><input type="text" name="presentation" /></div>
-              <div><label>Dosis</label><input type="text" name="dose" /></div>
-              <div><label>Frecuencia</label><input type="text" name="frequency" /></div>
-              <div><label>Duración</label><input type="text" name="duration" /></div>
-              <div><label>Fecha</label><input type="date" name="prescription_date" /></div>
-              <div class="full"><label>Indicaciones adicionales</label><textarea name="additional_instructions" rows="2"></textarea></div>
+              <div class="full">
+                <label>Medicamento (gota / colirio) *</label>
+                <input type="text" class="input-sm" name="medication" list="med-options" placeholder="Buscar por nombre comercial o principio activo…" required />
+                <datalist id="med-options"></datalist>
+              </div>
+              <div>
+                <label>Presentación</label>
+                <select class="select-sm" name="presentation">
+                  <option value="">Seleccionar…</option>
+                  <option>Gotas</option>
+                  <option>Ungüento</option>
+                  <option>Gel oftálmico</option>
+                  <option>Cápsulas / comprimidos</option>
+                  <option>Solución oral</option>
+                </select>
+              </div>
+              <div><label>Dosis (cantidad / concentración)</label><input type="text" class="input-sm" name="dose" placeholder="Ej: 1 gota, 0.5%" /></div>
+              <div><label>Frecuencia</label><input type="text" class="input-sm" name="frequency" placeholder="Ej: cada 8 horas" /></div>
+              <div><label>Duración</label><input type="text" class="input-sm" name="duration" placeholder="Ej: 7 días" /></div>
+              <div><label>Fecha</label><input type="date" class="input-sm" name="prescription_date" /></div>
+              <div class="full"><label>Indicaciones adicionales</label><textarea class="compact-area" name="additional_instructions" rows="2"></textarea></div>
             </div>
             <button type="submit" class="btn btn-primary" data-label="Guardar indicación">Guardar indicación</button>
           </form>

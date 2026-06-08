@@ -7,6 +7,52 @@ import { getCurrentUser } from './auth.js';
 
 const FIELDS = ['medication', 'presentation', 'dose', 'frequency', 'duration', 'additional_instructions', 'prescription_date'];
 
+// Gotas / colirios oftalmológicos comunes en el mercado paraguayo (nombre comercial — laboratorio / principio activo)
+const COMMON_EYE_DROPS = [
+  'Lagrimax (Roux-Ocefa) — lágrima artificial',
+  'Optive (Allergan) — lágrima artificial',
+  'Systane (Alcon) — lágrima artificial',
+  'Refresh Tears (Allergan) — lágrima artificial',
+  'Hialuron Lágrimas (Officine) — ácido hialurónico',
+  'Vislube — ácido hialurónico',
+  'Tobrex (Alcon) — tobramicina',
+  'Tobradex (Alcon) — tobramicina + dexametasona',
+  'Ciloxan (Alcon) — ciprofloxacina',
+  'Vigamox (Alcon) — moxifloxacina',
+  'Exocin (Allergan) — ofloxacina',
+  'Maxitrol (Alcon) — neomicina + polimixina B + dexametasona',
+  'Predfort (Allergan) — acetato de prednisolona',
+  'Flarex (Alcon) — fluorometolona',
+  'FML (Allergan) — fluorometolona',
+  'Nevanac (Alcon) — nepafenaco',
+  'Acuvail / Acular (Allergan) — ketorolaco',
+  'Voltaren Oftálmico (Novartis) — diclofenaco',
+  'Cosopt (Santen) — dorzolamida + timolol',
+  'Combigan (Allergan) — brimonidina + timolol',
+  'Azopt (Alcon) — brinzolamida',
+  'Alphagan (Allergan) — brimonidina',
+  'Timoptol (MSD) — timolol',
+  'Xalatan (Pfizer) — latanoprost',
+  'Lumigan (Allergan) — bimatoprost',
+  'Travatan (Alcon) — travoprost',
+  'Ganfort (Allergan) — bimatoprost + timolol',
+  'Patanol / Pataday (Novartis) — olopatadina',
+  'Zaditen (Novartis) — ketotifeno',
+  'Naaxia / Lastacaft (Allergan) — alcaftadina',
+  'Cromolerg (Officine) — cromoglicato sódico',
+  'Atropina 1% (Oftalmi) — atropina',
+  'Ciclopentolato (Cicloplégico) — ciclopentolato',
+  'Fenilefrina 10% (Oftalmi) — fenilefrina',
+  'Tropicamida (Oftalmi) — tropicamida',
+];
+
+/** Carga las opciones del datalist de medicamentos comunes en el formulario de indicaciones. */
+function populateMedicationDatalist() {
+  const datalist = document.getElementById('med-options');
+  if (!datalist || datalist.options.length) return;
+  datalist.innerHTML = COMMON_EYE_DROPS.map((m) => `<option value="${m}"></option>`).join('');
+}
+
 export async function createPrescription(patientId, data) {
   const user = await getCurrentUser();
   if (!user) return { error: 'Sesión no encontrada.' };
@@ -40,6 +86,7 @@ async function audit(action, entityType, entityId) {
 }
 
 export async function initPrescriptionsPanel(patientId) {
+  populateMedicationDatalist();
   const form = document.getElementById('prescription-form');
   const list = document.getElementById('prescription-list');
   if (!form || !list) return;
