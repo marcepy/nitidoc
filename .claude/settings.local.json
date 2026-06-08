@@ -12,7 +12,9 @@
       "Bash(export CLAUDE_CODE_TMPDIR=/tmp)",
       "Bash(mkdir -p /tmp/cc-tmp)",
       "Bash(export CLAUDE_CODE_TMPDIR=/tmp/cc-tmp)",
-      "Bash(grep -n \"clinical\\\\|Clinical\" /Users/marcelomartinez/Documents/Nitidoc/patient.html)"
+      "Bash(grep -n \"clinical\\\\|Clinical\" /Users/marcelomartinez/Documents/Nitidoc/patient.html)",
+      "Bash(grep -n \"data-tab=\\\\|panel-\\\\|<div class=\\\\\"tabs\\\\\"\\\\|</div>\\\\s*$\" /Users/marcelomartinez/Documents/Nitidoc/patient.html)",
+      "Bash(python3 -)"
     ]
   }
 }

@@ -366,6 +366,9 @@ tbody tr:hover td { background: var(--bg); }
 .tab-panel { display: none; }
 .tab-panel.active { display: block; }
 
+.tab-subpanel { display: none; }
+.tab-subpanel.active { display: block; }
+
 /* Login */
 .login-wrapper {
   min-height: 100vh;

@@ -76,13 +76,9 @@
 
       <!-- Pestañas: separación clara entre administrativo y clínico -->
       <div class="tabs">
-        <div class="tab active" data-tab="admin">Datos administrativos</div>
-        <div class="tab" data-tab="visits">Consultas</div>
-        <div class="tab" data-tab="refraction">Refracción</div>
-        <div class="tab" data-tab="prescriptions">Medicación</div>
-        <div class="tab" data-tab="studies">Estudios</div>
-        <div class="tab" data-tab="biometry">Biometría / Microscopía</div>
-        <div class="tab" data-tab="files">Archivos</div>
+        <div class="tab active" data-tab="admin">Datos personales</div>
+        <div class="tab" data-tab="clinical-history">Historial clínico</div>
+        <div class="tab" data-tab="files">Documentos adjuntos</div>
       </div>
 
       <!-- Panel: Datos administrativos -->
@@ -153,8 +149,18 @@
         </div>
       </div>
 
+      <!-- Panel agrupador: Historial clínico -->
+      <div class="tab-panel" id="panel-clinical-history">
+        <div class="tabs" id="clinical-subtabs">
+          <div class="tab active" data-subtab="visits">Consultas</div>
+          <div class="tab" data-subtab="refraction">Refracción</div>
+          <div class="tab" data-subtab="prescriptions">Medicación</div>
+          <div class="tab" data-subtab="studies">Estudios</div>
+          <div class="tab" data-subtab="biometry">Biometría / Microscopía</div>
+        </div>
+
       <!-- Panel: Historial de consultas -->
-      <div class="tab-panel" id="panel-visits">
+      <div class="tab-subpanel active" id="panel-visits">
         <div class="card">
           <div class="flex-between">
             <h2>Historial de consultas</h2>
@@ -167,7 +173,7 @@
       </div>
 
       <!-- Panel: Refracción -->
-      <div class="tab-panel" id="panel-refraction">
+      <div class="tab-subpanel" id="panel-refraction">
         <div class="card">
           <h2>Nueva receta de lentes</h2>
           <form id="refraction-form">
@@ -202,7 +208,7 @@
       </div>
 
       <!-- Panel: Medicación -->
-      <div class="tab-panel" id="panel-prescriptions">
+      <div class="tab-subpanel" id="panel-prescriptions">
         <div class="card">
           <h2>Nueva indicación / receta médica</h2>
           <form id="prescription-form">
@@ -223,7 +229,7 @@
       </div>
 
       <!-- Panel: Estudios -->
-      <div class="tab-panel" id="panel-studies">
+      <div class="tab-subpanel" id="panel-studies">
         <div class="card">
           <h2>Solicitar estudio oftalmológico</h2>
           <form id="ophthalmic-study-form">
@@ -283,7 +289,7 @@
       </div>
 
       <!-- Panel: Biometría / Microscopía -->
-      <div class="tab-panel" id="panel-biometry">
+      <div class="tab-subpanel" id="panel-biometry">
         <div class="card">
           <h2>Nueva biometría</h2>
           <form id="biometry-form">
@@ -323,6 +329,7 @@
           </form>
         </div>
         <div id="specular-list"></div>
+      </div>
       </div>
 
       <!-- Panel: Archivos adjuntos -->
@@ -426,13 +433,23 @@
         showAlert('alert-box', 'Exportación registrada. Generando documento para imprimir/guardar como PDF…', 'success');
       });
 
-      // Pestañas
-      document.querySelectorAll('.tab').forEach((tab) => {
+      // Pestañas principales (nivel superior)
+      document.querySelectorAll('.tabs > .tab[data-tab]').forEach((tab) => {
         tab.addEventListener('click', () => {
-          document.querySelectorAll('.tab').forEach((t) => t.classList.remove('active'));
+          document.querySelectorAll('.tabs > .tab[data-tab]').forEach((t) => t.classList.remove('active'));
           document.querySelectorAll('.tab-panel').forEach((p) => p.classList.remove('active'));
           tab.classList.add('active');
           document.getElementById(`panel-${tab.dataset.tab}`)?.classList.add('active');
+        });
+      });
+
+      // Sub-pestañas dentro de "Historial clínico"
+      document.querySelectorAll('#clinical-subtabs > .tab[data-subtab]').forEach((tab) => {
+        tab.addEventListener('click', () => {
+          document.querySelectorAll('#clinical-subtabs > .tab[data-subtab]').forEach((t) => t.classList.remove('active'));
+          document.querySelectorAll('.tab-subpanel').forEach((p) => p.classList.remove('active'));
+          tab.classList.add('active');
+          document.getElementById(`panel-${tab.dataset.subtab}`)?.classList.add('active');
         });
       });
 
