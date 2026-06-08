@@ -274,6 +274,62 @@ export function renderPatientsList(containerId, patients) {
 // Inicialización del dashboard (búsqueda, filtros, listado)
 // =====================================================================
 
+/** Calcula estadísticas resumidas para las tarjetas del dashboard. */
+export async function getDashboardStats() {
+  const user = await getCurrentUser();
+  if (!user) return null;
+
+  const startOfToday = new Date();
+  startOfToday.setHours(0, 0, 0, 0);
+  const in30Days = new Date();
+  in30Days.setDate(in30Days.getDate() + 30);
+  const sevenDaysAgo = new Date();
+  sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+
+  const [{ count: totalPatients }, { count: visitsToday }, { count: upcomingControls }, { count: newThisWeek }] = await Promise.all([
+    supabase.from('patients').select('id', { count: 'exact', head: true }).eq('doctor_id', user.id).eq('archived', false),
+    supabase.from('visits').select('id', { count: 'exact', head: true }).eq('doctor_id', user.id).gte('visit_date', startOfToday.toISOString()),
+    supabase.from('visits').select('id', { count: 'exact', head: true }).eq('doctor_id', user.id).gte('next_control_at', startOfToday.toISOString().slice(0, 10)).lte('next_control_at', in30Days.toISOString().slice(0, 10)),
+    supabase.from('patients').select('id', { count: 'exact', head: true }).eq('doctor_id', user.id).gte('created_at', sevenDaysAgo.toISOString()),
+  ]);
+
+  return {
+    totalPatients: totalPatients || 0,
+    visitsToday: visitsToday || 0,
+    upcomingControls: upcomingControls || 0,
+    newThisWeek: newThisWeek || 0,
+  };
+}
+
+/** Renderiza las tarjetas de estadísticas del dashboard. */
+export function renderDashboardStats(containerId, stats) {
+  const container = document.getElementById(containerId);
+  if (!container || !stats) return;
+
+  container.innerHTML = `
+    <div class="stat-card">
+      <div class="stat-label">Pacientes activos</div>
+      <div class="stat-value">${stats.totalPatients}</div>
+      <div class="stat-sub">Total registrados</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Consultas de hoy</div>
+      <div class="stat-value">${stats.visitsToday}</div>
+      <div class="stat-sub">Registradas en el día</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Próximos controles</div>
+      <div class="stat-value">${stats.upcomingControls}</div>
+      <div class="stat-sub">En los próximos 30 días</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Pacientes nuevos</div>
+      <div class="stat-value">${stats.newThisWeek}</div>
+      <div class="stat-sub">En los últimos 7 días</div>
+    </div>
+  `;
+}
+
 export async function initPatientsDashboard() {
   const listContainer = 'patients-list';
   const searchInput = document.getElementById('patient-search');

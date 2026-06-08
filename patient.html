@@ -30,10 +30,13 @@
 
       <!-- Encabezado del paciente -->
       <div class="card">
-        <div class="flex-between" style="flex-wrap: wrap; gap: 0.75rem;">
-          <div>
-            <h1 id="patient-name" style="margin:0;">Cargando paciente…</h1>
-            <p class="text-muted" id="patient-meta"></p>
+        <div class="flex-between" style="flex-wrap: wrap; gap: 1rem;">
+          <div class="flex gap-1" style="align-items:center;">
+            <div id="patient-avatar" style="width:52px;height:52px;border-radius:50%;background:var(--teal);color:#fff;display:flex;align-items:center;justify-content:center;font-family:var(--font-head);font-weight:700;font-size:1.2rem;flex-shrink:0;">--</div>
+            <div>
+              <h1 id="patient-name" style="margin:0; font-size:1.4rem;">Cargando paciente…</h1>
+              <p class="text-muted" id="patient-meta" style="margin:0.2rem 0 0;"></p>
+            </div>
           </div>
           <div class="flex gap-1" style="flex-wrap: wrap;">
             <a class="btn btn-primary" id="new-visit-btn" href="#">Nueva consulta</a>
@@ -482,6 +485,10 @@
         `${age != null ? age + ' años · ' : ''}` +
         `${escapeHtml(patient.document_id || 'Sin documento')} · ` +
         `Última consulta: ${escapeHtml(patient.last_visit_at ? formatDate(patient.last_visit_at) : 'Sin consultas')}`;
+
+      const initials = `${(patient.first_name || '?')[0] || ''}${(patient.last_name || '?')[0] || ''}`.toUpperCase();
+      const avatar = document.getElementById('patient-avatar');
+      if (avatar) avatar.textContent = initials || '--';
     }
 
     function fillAdminForm(patient) {

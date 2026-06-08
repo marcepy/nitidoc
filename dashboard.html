@@ -35,6 +35,9 @@
 
       <div id="alert-box"></div>
 
+      <!-- Resumen / estadísticas -->
+      <div class="grid-4" id="dashboard-stats" style="margin-bottom:1.25rem;"></div>
+
       <!-- Formulario rápido de nuevo paciente -->
       <section class="card" id="new-patient-card" style="display:none;">
         <h2>Nuevo paciente</h2>
@@ -128,12 +131,13 @@
   <script src="js/config.js"></script>
   <script type="module">
     import { requireAuth, signOut, initPinLock } from './js/auth.js';
-    import { initPatientsDashboard, initNewPatientForm } from './js/patients.js';
+    import { initPatientsDashboard, initNewPatientForm, getDashboardStats, renderDashboardStats } from './js/patients.js';
 
     (async () => {
       const session = await requireAuth();
       if (session) initPinLock(session.user.id);
       await initPatientsDashboard();
+      renderDashboardStats('dashboard-stats', await getDashboardStats());
       initNewPatientForm(() => {
         document.getElementById('new-patient-card').style.display = 'none';
         initPatientsDashboard();
