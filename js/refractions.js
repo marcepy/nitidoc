@@ -11,10 +11,16 @@ const FIELDS = [
   'pupillary_distance', 'lens_type', 'intended_use', 'notes', 'issue_date',
 ];
 
+const LENS_OPTION_FIELDS = [
+  'lens_uv', 'lens_antireflejo', 'lens_fotocromatico',
+  'lens_filtro_luz_azul', 'lens_superfinos', 'lens_polarizado',
+];
+
 export async function createRefraction(patientId, data) {
   const user = await getCurrentUser();
   if (!user) return { error: 'Sesión no encontrada.' };
   const payload = pick(data, FIELDS);
+  LENS_OPTION_FIELDS.forEach((f) => { payload[f] = !!data[f]; });
   payload.doctor_id = user.id;
   payload.patient_id = patientId;
   const { data: row, error } = await supabase.from('refractions').insert(payload).select().single();

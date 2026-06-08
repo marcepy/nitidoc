@@ -202,10 +202,37 @@
             </div>
 
             <div class="form-grid mt-1">
-              <div><label>Distancia pupilar</label><input type="text" class="input-sm" name="pupillary_distance" /></div>
-              <div><label>Tipo de lente</label><input type="text" class="input-sm" name="lens_type" /></div>
-              <div><label>Uso indicado</label><input type="text" class="input-sm" name="intended_use" /></div>
+              <div>
+                <label>Distancia pupilar (mm)</label>
+                <input type="text" class="input-sm" style="max-width:120px;" name="pupillary_distance" placeholder="Ej: 63" />
+              </div>
+              <div>
+                <label>Tipo de lente</label>
+                <select class="select-sm" name="lens_type">
+                  <option value="">Seleccionar…</option>
+                  <option value="Monofocal">Monofocal</option>
+                  <option value="Bifocal">Bifocal</option>
+                  <option value="Multifocal / Progresivo">Multifocal / Progresivo</option>
+                </select>
+              </div>
+              <div>
+                <label>Uso indicado</label>
+                <input type="text" class="input-sm" name="intended_use" />
+              </div>
               <div><label>Fecha de emisión</label><input type="date" class="input-sm" name="issue_date" /></div>
+            </div>
+
+            <label class="mt-1">Tratamientos / acabados</label>
+            <div class="lens-options-grid">
+              <label class="lens-option"><input type="checkbox" name="lens_uv" value="true" /> UV</label>
+              <label class="lens-option"><input type="checkbox" name="lens_antireflejo" value="true" /> Antireflejo</label>
+              <label class="lens-option"><input type="checkbox" name="lens_fotocromatico" value="true" /> Fotocromático</label>
+              <label class="lens-option"><input type="checkbox" name="lens_filtro_luz_azul" value="true" /> Filtro luz azul</label>
+              <label class="lens-option"><input type="checkbox" name="lens_superfinos" value="true" /> Lentes superfinos</label>
+              <label class="lens-option"><input type="checkbox" name="lens_polarizado" value="true" /> Polarizado</label>
+            </div>
+
+            <div class="form-grid mt-1">
               <div class="full"><label>Observaciones</label><textarea class="compact-area" name="notes" rows="2"></textarea></div>
             </div>
             <button type="submit" class="btn btn-primary" data-label="Guardar refracción">Guardar refracción</button>

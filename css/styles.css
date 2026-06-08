@@ -515,6 +515,33 @@ tbody tr:hover td { background: var(--bg); }
   .rx-compact-grid { grid-template-columns: 40px repeat(5, minmax(0,1fr)); font-size: 0.78rem; }
 }
 
+.lens-options-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+.lens-option {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.45rem 0.7rem;
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius);
+  font-size: 0.84rem;
+  font-weight: 500;
+  color: var(--text-2);
+  cursor: pointer;
+  margin-bottom: 0;
+  transition: all .15s ease;
+}
+.lens-option:hover { border-color: var(--teal); background: var(--teal-pale); }
+.lens-option input { width: auto; margin: 0; accent-color: var(--teal); }
+
+@media (max-width: 768px) {
+  .lens-options-grid { grid-template-columns: 1fr 1fr; }
+}
+
 .compact-area {
   padding: 0.45rem 0.65rem;
   font-size: 0.85rem;

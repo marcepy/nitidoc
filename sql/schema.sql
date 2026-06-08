@@ -214,6 +214,14 @@ create table if not exists refractions (
   updated_at timestamptz not null default now()
 );
 
+-- Tratamientos / acabados de lentes (checkboxes en el formulario de refracción)
+alter table refractions add column if not exists lens_uv boolean not null default false;
+alter table refractions add column if not exists lens_antireflejo boolean not null default false;
+alter table refractions add column if not exists lens_fotocromatico boolean not null default false;
+alter table refractions add column if not exists lens_filtro_luz_azul boolean not null default false;
+alter table refractions add column if not exists lens_superfinos boolean not null default false;
+alter table refractions add column if not exists lens_polarizado boolean not null default false;
+
 create index if not exists idx_refractions_patient_id on refractions(patient_id);
 create index if not exists idx_refractions_doctor_id on refractions(doctor_id);
 
