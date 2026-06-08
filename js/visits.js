@@ -154,7 +154,23 @@ export async function loadPatientVisitsPanel(containerId, patientId) {
 // Inicialización de visit.html (formulario de nueva consulta / edición)
 // =====================================================================
 
+const VA_OPTIONS = [
+  '', '20/20', '20/25', '20/30', '20/40', '20/50', '20/60', '20/70',
+  '20/80', '20/100', '20/200', '20/400',
+  'CD 1m', 'CD 2m', 'CD 3m', 'MM', 'PL+', 'PL-',
+];
+
+function populateVaSelects() {
+  document.querySelectorAll('select.va-select').forEach((select) => {
+    if (select.options.length) return;
+    select.innerHTML = VA_OPTIONS.map((v) =>
+      `<option value="${v}">${v === '' ? 'Seleccionar…' : v}</option>`
+    ).join('');
+  });
+}
+
 export async function initVisitPage() {
+  populateVaSelects();
   const params = new URLSearchParams(window.location.search);
   const visitId = params.get('id');
   const preselectedPatientId = params.get('patient');

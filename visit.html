@@ -91,30 +91,43 @@
 
         <section class="card">
           <h2>Agudeza visual y presión intraocular</h2>
-          <div class="form-grid">
-            <div>
-              <label for="va_od_uncorrected">AV OD sin corrección</label>
-              <input type="text" id="va_od_uncorrected" name="va_od_uncorrected" />
+
+          <details class="vision-disclosure" open>
+            <summary>Visión (agudeza visual) — clic para mostrar / ocultar</summary>
+            <div class="vision-compact-grid">
+              <div class="vision-compact-group">
+                <span class="vision-compact-title">Sin corrección</span>
+                <div class="vision-compact-row">
+                  <label for="va_od_uncorrected">OD</label>
+                  <select class="select-sm va-select" id="va_od_uncorrected" name="va_od_uncorrected"></select>
+                </div>
+                <div class="vision-compact-row">
+                  <label for="va_oi_uncorrected">OI</label>
+                  <select class="select-sm va-select" id="va_oi_uncorrected" name="va_oi_uncorrected"></select>
+                </div>
+              </div>
+              <div class="vision-compact-group">
+                <span class="vision-compact-title">Con corrección</span>
+                <div class="vision-compact-row">
+                  <label for="va_od_corrected">OD</label>
+                  <select class="select-sm va-select" id="va_od_corrected" name="va_od_corrected"></select>
+                </div>
+                <div class="vision-compact-row">
+                  <label for="va_oi_corrected">OI</label>
+                  <select class="select-sm va-select" id="va_oi_corrected" name="va_oi_corrected"></select>
+                </div>
+              </div>
             </div>
-            <div>
-              <label for="va_oi_uncorrected">AV OI sin corrección</label>
-              <input type="text" id="va_oi_uncorrected" name="va_oi_uncorrected" />
-            </div>
-            <div>
-              <label for="va_od_corrected">AV OD con corrección</label>
-              <input type="text" id="va_od_corrected" name="va_od_corrected" />
-            </div>
-            <div>
-              <label for="va_oi_corrected">AV OI con corrección</label>
-              <input type="text" id="va_oi_corrected" name="va_oi_corrected" />
-            </div>
+          </details>
+
+          <div class="form-grid mt-1">
             <div>
               <label for="iop_od">Presión intraocular OD</label>
-              <input type="text" id="iop_od" name="iop_od" />
+              <input type="text" class="input-sm" id="iop_od" name="iop_od" placeholder="mmHg" />
             </div>
             <div>
               <label for="iop_oi">Presión intraocular OI</label>
-              <input type="text" id="iop_oi" name="iop_oi" />
+              <input type="text" class="input-sm" id="iop_oi" name="iop_oi" placeholder="mmHg" />
             </div>
           </div>
         </section>
