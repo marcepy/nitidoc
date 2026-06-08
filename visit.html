@@ -58,35 +58,41 @@
               <label for="current_illness">Enfermedad actual</label>
               <textarea id="current_illness" name="current_illness" rows="2"></textarea>
             </div>
-            <div>
-              <label for="personal_history">Antecedentes personales</label>
-              <textarea id="personal_history" name="personal_history" rows="2"></textarea>
-            </div>
-            <div>
-              <label for="ophthalmic_history">Antecedentes oftalmológicos</label>
-              <textarea id="ophthalmic_history" name="ophthalmic_history" rows="2"></textarea>
-            </div>
-            <div>
-              <label for="family_history">Antecedentes familiares</label>
-              <textarea id="family_history" name="family_history" rows="2"></textarea>
-            </div>
-            <div>
-              <label for="allergies">Alergias</label>
-              <input type="text" id="allergies" name="allergies" />
-            </div>
-            <div>
-              <label for="previous_surgeries">Cirugías previas</label>
-              <input type="text" id="previous_surgeries" name="previous_surgeries" />
-            </div>
-            <div>
-              <label for="systemic_diseases">Enfermedades sistémicas</label>
-              <input type="text" id="systemic_diseases" name="systemic_diseases" />
-            </div>
-            <div class="full">
-              <label for="current_medication">Medicación actual</label>
-              <input type="text" id="current_medication" name="current_medication" />
-            </div>
           </div>
+
+          <details class="vision-disclosure">
+            <summary>Antecedentes y medicación — clic para mostrar / ocultar</summary>
+            <div class="form-grid mt-1">
+              <div>
+                <label for="personal_history">Antecedentes personales</label>
+                <textarea class="compact-area" id="personal_history" name="personal_history" rows="2"></textarea>
+              </div>
+              <div>
+                <label for="ophthalmic_history">Antecedentes oftalmológicos</label>
+                <textarea class="compact-area" id="ophthalmic_history" name="ophthalmic_history" rows="2"></textarea>
+              </div>
+              <div>
+                <label for="family_history">Antecedentes familiares</label>
+                <textarea class="compact-area" id="family_history" name="family_history" rows="2"></textarea>
+              </div>
+              <div>
+                <label for="allergies">Alergias</label>
+                <input type="text" class="input-sm" id="allergies" name="allergies" />
+              </div>
+              <div>
+                <label for="previous_surgeries">Cirugías previas</label>
+                <input type="text" class="input-sm" id="previous_surgeries" name="previous_surgeries" />
+              </div>
+              <div>
+                <label for="systemic_diseases">Enfermedades sistémicas</label>
+                <input type="text" class="input-sm" id="systemic_diseases" name="systemic_diseases" />
+              </div>
+              <div class="full">
+                <label for="current_medication">Medicación actual</label>
+                <input type="text" class="input-sm" id="current_medication" name="current_medication" />
+              </div>
+            </div>
+          </details>
         </section>
 
         <section class="card">
@@ -134,16 +140,19 @@
 
         <section class="card">
           <h2>Examen clínico</h2>
-          <div class="form-grid">
-            <div class="full">
-              <label for="biomicroscopy">Biomicroscopía</label>
-              <textarea id="biomicroscopy" name="biomicroscopy" rows="2"></textarea>
+          <details class="vision-disclosure" open>
+            <summary>Biomicroscopía y fondo de ojo — clic para mostrar / ocultar</summary>
+            <div class="form-grid mt-1">
+              <div class="full">
+                <label for="biomicroscopy">Biomicroscopía</label>
+                <textarea class="compact-area" id="biomicroscopy" name="biomicroscopy" rows="2"></textarea>
+              </div>
+              <div class="full">
+                <label for="fundus">Fondo de ojo</label>
+                <textarea class="compact-area" id="fundus" name="fundus" rows="2"></textarea>
+              </div>
             </div>
-            <div class="full">
-              <label for="fundus">Fondo de ojo</label>
-              <textarea id="fundus" name="fundus" rows="2"></textarea>
-            </div>
-          </div>
+          </details>
         </section>
 
         <section class="card">
@@ -151,21 +160,26 @@
           <div class="form-grid">
             <div class="full">
               <label for="diagnosis">Diagnóstico</label>
-              <textarea id="diagnosis" name="diagnosis" rows="2"></textarea>
-            </div>
-            <div class="full">
-              <label for="medical_plan">Conducta médica</label>
-              <textarea id="medical_plan" name="medical_plan" rows="2"></textarea>
-            </div>
-            <div class="full">
-              <label for="instructions">Indicaciones</label>
-              <textarea id="instructions" name="instructions" rows="2"></textarea>
+              <textarea class="compact-area" id="diagnosis" name="diagnosis" rows="2"></textarea>
             </div>
             <div>
               <label for="next_control_at">Próximo control</label>
-              <input type="date" id="next_control_at" name="next_control_at" />
+              <input type="date" class="input-sm" id="next_control_at" name="next_control_at" />
             </div>
           </div>
+          <details class="vision-disclosure">
+            <summary>Conducta médica e indicaciones — clic para mostrar / ocultar</summary>
+            <div class="form-grid mt-1">
+              <div class="full">
+                <label for="medical_plan">Conducta médica</label>
+                <textarea class="compact-area" id="medical_plan" name="medical_plan" rows="2"></textarea>
+              </div>
+              <div class="full">
+                <label for="instructions">Indicaciones</label>
+                <textarea class="compact-area" id="instructions" name="instructions" rows="2"></textarea>
+              </div>
+            </div>
+          </details>
         </section>
 
         <div class="flex gap-1 mb-1">

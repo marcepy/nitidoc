@@ -487,6 +487,12 @@ tbody tr:hover td { background: var(--bg); }
   margin-bottom: 0;
 }
 
+.compact-area {
+  padding: 0.45rem 0.65rem;
+  font-size: 0.85rem;
+  min-height: 2.6rem;
+}
+
 @media (max-width: 768px) {
   .vision-compact-grid { grid-template-columns: 1fr; }
 }
