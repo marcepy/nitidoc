@@ -177,28 +177,36 @@
         <div class="card">
           <h2>Nueva receta de lentes</h2>
           <form id="refraction-form">
-            <h3>Ojo derecho (OD)</h3>
-            <div class="form-grid">
-              <div><label>Esfera</label><input type="text" name="od_sphere" /></div>
-              <div><label>Cilindro</label><input type="text" name="od_cylinder" /></div>
-              <div><label>Eje</label><input type="text" name="od_axis" /></div>
-              <div><label>Adición</label><input type="text" name="od_addition" /></div>
-              <div><label>AV final</label><input type="text" name="od_final_va" /></div>
+            <span class="vision-compact-title">Esfera · Cilindro · Eje · Adición · AV final</span>
+            <div class="rx-compact-grid">
+              <div></div>
+              <div class="rx-col-label">Esf.</div>
+              <div class="rx-col-label">Cil.</div>
+              <div class="rx-col-label">Eje</div>
+              <div class="rx-col-label">Adición</div>
+              <div class="rx-col-label">AV final</div>
+
+              <div class="rx-eye-label">OD</div>
+              <input type="text" class="input-sm" name="od_sphere" placeholder="+/-0.00" />
+              <input type="text" class="input-sm" name="od_cylinder" placeholder="-0.00" />
+              <input type="text" class="input-sm" name="od_axis" placeholder="0°" />
+              <input type="text" class="input-sm" name="od_addition" placeholder="+0.00" />
+              <input type="text" class="input-sm" name="od_final_va" placeholder="20/20" />
+
+              <div class="rx-eye-label">OI</div>
+              <input type="text" class="input-sm" name="oi_sphere" placeholder="+/-0.00" />
+              <input type="text" class="input-sm" name="oi_cylinder" placeholder="-0.00" />
+              <input type="text" class="input-sm" name="oi_axis" placeholder="0°" />
+              <input type="text" class="input-sm" name="oi_addition" placeholder="+0.00" />
+              <input type="text" class="input-sm" name="oi_final_va" placeholder="20/20" />
             </div>
-            <h3>Ojo izquierdo (OI)</h3>
-            <div class="form-grid">
-              <div><label>Esfera</label><input type="text" name="oi_sphere" /></div>
-              <div><label>Cilindro</label><input type="text" name="oi_cylinder" /></div>
-              <div><label>Eje</label><input type="text" name="oi_axis" /></div>
-              <div><label>Adición</label><input type="text" name="oi_addition" /></div>
-              <div><label>AV final</label><input type="text" name="oi_final_va" /></div>
-            </div>
-            <div class="form-grid">
-              <div><label>Distancia pupilar</label><input type="text" name="pupillary_distance" /></div>
-              <div><label>Tipo de lente</label><input type="text" name="lens_type" /></div>
-              <div><label>Uso indicado</label><input type="text" name="intended_use" /></div>
-              <div><label>Fecha de emisión</label><input type="date" name="issue_date" /></div>
-              <div class="full"><label>Observaciones</label><textarea name="notes" rows="2"></textarea></div>
+
+            <div class="form-grid mt-1">
+              <div><label>Distancia pupilar</label><input type="text" class="input-sm" name="pupillary_distance" /></div>
+              <div><label>Tipo de lente</label><input type="text" class="input-sm" name="lens_type" /></div>
+              <div><label>Uso indicado</label><input type="text" class="input-sm" name="intended_use" /></div>
+              <div><label>Fecha de emisión</label><input type="date" class="input-sm" name="issue_date" /></div>
+              <div class="full"><label>Observaciones</label><textarea class="compact-area" name="notes" rows="2"></textarea></div>
             </div>
             <button type="submit" class="btn btn-primary" data-label="Guardar refracción">Guardar refracción</button>
           </form>

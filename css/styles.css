@@ -487,6 +487,34 @@ tbody tr:hover td { background: var(--bg); }
   margin-bottom: 0;
 }
 
+.rx-compact-grid {
+  display: grid;
+  grid-template-columns: 50px repeat(5, 1fr);
+  gap: 0.5rem;
+  align-items: center;
+  margin: 0.6rem 0 0.3rem;
+  max-width: 720px;
+}
+.rx-col-label {
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: var(--text-3);
+  text-transform: uppercase;
+  letter-spacing: .4px;
+  text-align: center;
+}
+.rx-eye-label {
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: var(--navy);
+  text-align: center;
+}
+.rx-compact-grid input { text-align: center; margin-bottom: 0; }
+
+@media (max-width: 768px) {
+  .rx-compact-grid { grid-template-columns: 40px repeat(5, minmax(0,1fr)); font-size: 0.78rem; }
+}
+
 .compact-area {
   padding: 0.45rem 0.65rem;
   font-size: 0.85rem;
