@@ -14,7 +14,11 @@
       "Bash(export CLAUDE_CODE_TMPDIR=/tmp/cc-tmp)",
       "Bash(grep -n \"clinical\\\\|Clinical\" /Users/marcelomartinez/Documents/Nitidoc/patient.html)",
       "Bash(grep -n \"data-tab=\\\\|panel-\\\\|<div class=\\\\\"tabs\\\\\"\\\\|</div>\\\\s*$\" /Users/marcelomartinez/Documents/Nitidoc/patient.html)",
-      "Bash(python3 -)"
+      "Bash(python3 -)",
+      "Read(//Users/marcelomartinez/Library/Application Support/Claude/local-agent-mode-sessions/skills-plugin/e3425414-d55a-4859-9bc5-da13282aaa21/3901b7a8-4abe-4344-b00d-f00e624f2da4/skills/xlsx/**)",
+      "Bash(extract-text \"/Users/marcelomartinez/Downloads/vademecum_oftalmologico_paraguayo.xlsx\")",
+      "Bash(python3 -c ' *)",
+      "Bash(pip3 install *)"
     ]
   }
 }
